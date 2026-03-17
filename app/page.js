@@ -40,6 +40,7 @@ export default function Home() {
           <a href="#youtube" className="hover:text-[#1e3a5f] transition">YouTube</a>
           <a href="#contact" className="hover:text-[#1e3a5f] transition">Contact</a>
           <a href="https://practice.flight-levels.com" target="_blank" className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2 rounded-lg transition">ATC Trainer</a>
+          <a href="https://checkride.flight-levels.com" target="_blank" className="bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2 rounded-lg transition">Checkride Prep</a>
         </div>
       </nav>
 
@@ -47,7 +48,7 @@ export default function Home() {
       <section className="bg-gradient-to-br from-[#0f2044] to-[#1d4ed8] text-white px-8 py-28 text-center">
         <div>
         <div className="inline-block bg-white/10 border border-white/20 text-blue-200 text-sm px-4 py-1 rounded-full mb-6">
-          Flight Instructor · Aviation Educator · ATC Systems Specialist
+          Flight Instructor · Aviation Educator · ATC Systems Specialist · App Developer
         </div>
         <h1 className="text-5xl md:text-6xl font-bold max-w-3xl mx-auto leading-tight mb-6">
           Both Sides of <span className="text-blue-300">the Radio</span>
@@ -61,6 +62,9 @@ export default function Home() {
           </a>
           <a href="https://practice.flight-levels.com" target="_blank" className="border border-white/30 hover:border-white/60 px-8 py-4 rounded-lg text-lg transition">
             Try ATC Trainer Free
+          </a>
+          <a href="https://checkride.flight-levels.com/demo" target="_blank" className="border border-teal-400/50 hover:border-teal-400 text-teal-300 hover:text-teal-200 px-8 py-4 rounded-lg text-lg transition">
+            Try Checkride Prep Free
           </a>
         </div>
         </div>
@@ -107,7 +111,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-[#1e3a5f] text-center mb-4">How I Can Help You</h2>
           <p className="text-gray-500 text-center mb-16">Whether you're preparing for a checkride, sharpening your radio skills, or ready to solo — I've got you covered.</p>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
 
             {/* ATC Trainer */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col">
@@ -122,9 +126,23 @@ export default function Home() {
               </a>
             </div>
 
+            {/* Checkride Prep AI */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-teal-100 hover:shadow-md transition flex flex-col relative overflow-hidden">
+              <div className="absolute top-3 right-3 bg-teal-500 text-white text-xs font-bold px-2 py-1 rounded-full">NEW</div>
+              <div className="text-4xl mb-4">🎓</div>
+              <h3 className="text-xl font-bold text-[#1e3a5f] mb-3">Checkride Prep AI</h3>
+              <p className="text-gray-500 mb-6 flex-1">
+                Practice your oral checkride on-demand with an AI examiner that thinks like a real DPE. Private, Instrument, and Commercial topics. Voice-enabled. Available 24/7.
+              </p>
+              <div className="text-sm text-gray-400 mb-4">$29 / month · Cancel anytime</div>
+              <a href="https://checkride.flight-levels.com/demo" target="_blank" className="block text-center bg-[#0f766e] hover:bg-[#0d6460] text-white px-6 py-3 rounded-lg font-medium transition">
+                Try Free Demo
+              </a>
+            </div>
+
             {/* Mock Oral */}
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col">
-              <div className="text-4xl mb-4">🎓</div>
+              <div className="text-4xl mb-4">👨‍✈️</div>
               <h3 className="text-xl font-bold text-[#1e3a5f] mb-3">Mock Oral Checkrides</h3>
               <p className="text-gray-500 mb-6 flex-1">
                 Simulate the oral portion of your FAA checkride via FaceTime or Teams. I'll ask the questions, challenge your knowledge, and give you honest feedback — so the real thing feels familiar.
@@ -222,6 +240,7 @@ export default function Home() {
                 <option value="Mock Oral Checkride">Mock Oral Checkride</option>
                 <option value="Flight Instruction">Flight Instruction</option>
                 <option value="ATC Trainer">ATC Trainer App</option>
+                <option value="Checkride Prep">Checkride Prep AI</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -259,6 +278,7 @@ export default function Home() {
         <div className="flex justify-center gap-6 mt-3">
           <a href="https://www.youtube.com/@Flight-Levels" target="_blank" className="hover:text-gray-600 transition">YouTube</a>
           <a href="https://practice.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">ATC Trainer</a>
+          <a href="https://checkride.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">Checkride Prep</a>
           <a href="mailto:joe@flight-levels.com" className="hover:text-gray-600 transition">joe@flight-levels.com</a>
         </div>
       </footer>
