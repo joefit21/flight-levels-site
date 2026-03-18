@@ -25,8 +25,45 @@ export default function Home() {
     }
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Person',
+        '@id': 'https://www.flight-levels.com/#joe',
+        name: 'Joe Mattison',
+        jobTitle: 'Certified Flight Instructor',
+        description: 'Flight instructor with 21+ years of experience and former FAA Air Traffic Controller. Offers flight instruction, mock oral checkrides, and AI-powered aviation training tools.',
+        url: 'https://www.flight-levels.com',
+        sameAs: ['https://www.youtube.com/@Flight-Levels'],
+      },
+      {
+        '@type': 'WebSite',
+        url: 'https://www.flight-levels.com',
+        name: 'Flight Levels',
+        description: 'Aviation training and tools by Joe Mattison — CFI and former ATC specialist.',
+        author: { '@id': 'https://www.flight-levels.com/#joe' },
+      },
+      {
+        '@type': 'Service',
+        name: 'Mock Oral Checkride',
+        provider: { '@id': 'https://www.flight-levels.com/#joe' },
+        description: 'Simulated FAA oral checkride via FaceTime or Teams with an experienced CFI. Covers private, instrument, and commercial certificates.',
+        offers: { '@type': 'Offer', price: '100', priceCurrency: 'USD', priceSpecification: { '@type': 'UnitPriceSpecification', unitText: 'HOUR' } },
+      },
+      {
+        '@type': 'Service',
+        name: 'Flight Instruction',
+        provider: { '@id': 'https://www.flight-levels.com/#joe' },
+        description: 'In-person flight instruction from a CFI with 21+ years of experience.',
+        offers: { '@type': 'Offer', price: '100', priceCurrency: 'USD', priceSpecification: { '@type': 'UnitPriceSpecification', unitText: 'HOUR' } },
+      },
+    ],
+  }
+
   return (
     <main className="min-h-screen bg-white text-gray-900">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-5 border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur z-50">
