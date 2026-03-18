@@ -167,6 +167,25 @@ export default function Home() {
             </div>
 
           </div>
+
+          {/* Bundle callout */}
+          <div className="mt-10 bg-gradient-to-r from-[#1e1b4b] to-[#312e81] border border-purple-500/40 rounded-2xl px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <div className="inline-block bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">BUNDLE DEAL</div>
+              <h3 className="text-xl font-bold text-white mb-1">Get Both AI Tools — ATC Trainer + Checkride Prep</h3>
+              <p className="text-purple-200 text-sm">One subscription. Full access to both products. Save $9/month vs. buying separately.</p>
+            </div>
+            <div className="flex items-center gap-6 flex-shrink-0">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">$49<span className="text-lg text-purple-300">/mo</span></div>
+                <div className="text-xs text-purple-400">vs. $58 separately</div>
+              </div>
+              <a href="https://checkride.flight-levels.com/signup?bundle=1" target="_blank" className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap">
+                Get the Bundle
+              </a>
+            </div>
+          </div>
+
         </div>
       </section>
 
