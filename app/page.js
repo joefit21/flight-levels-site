@@ -178,8 +178,14 @@ export default function Home() {
       </section>
 
       {/* Colorado Flying */}
-      <section id="colorado" className="bg-[#0f2044] text-white px-8 py-24">
-        <div className="max-w-5xl mx-auto">
+      <section
+        id="colorado"
+        className="relative text-white px-8 py-24"
+        style={{ backgroundImage: 'url(/Over_RLG.jpeg)', backgroundSize: 'cover', backgroundPosition: 'center 40%' }}
+      >
+        {/* Dark overlay so text stays readable */}
+        <div className="absolute inset-0 bg-[#0a1628]/88" />
+        <div className="relative z-10 max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <div className="inline-block bg-white/10 border border-white/20 text-blue-200 text-sm px-4 py-1 rounded-full mb-4">
               Based at KLMO · Longmont, Colorado
@@ -221,6 +227,30 @@ export default function Home() {
               <p className="text-blue-100 leading-relaxed">
                 You planned the trip, reserved the airplane or brought your own, and now you're flying into one of the most demanding environments in the country — probably for the first time. I offer pre-trip orientation, a local guide flight on arrival, or both. You'll leave knowing the terrain, the airspace, and exactly what ATC expects from you on that routing.
               </p>
+            </div>
+          </div>
+
+          {/* Photo strip */}
+          <div className="grid grid-cols-2 gap-4 mb-10">
+            <div className="relative group overflow-hidden rounded-2xl">
+              <img
+                src="/Cottonwood_pass.jpeg"
+                alt="Flying over Cottonwood Pass in the Colorado Rockies"
+                className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+                <p className="text-white text-sm font-medium">Cottonwood Pass · ~12,000 MSL</p>
+              </div>
+            </div>
+            <div className="relative group overflow-hidden rounded-2xl">
+              <img
+                src="/TEX.jpg"
+                alt="Telluride Regional Airport (KTEX) — a challenging mountain destination"
+                className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+                <p className="text-white text-sm font-medium">Telluride Regional (KTEX) · 9,078 MSL</p>
+              </div>
             </div>
           </div>
 
