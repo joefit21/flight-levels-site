@@ -54,7 +54,7 @@ export default function Home() {
       },
       {
         '@type': 'Service',
-        name: 'Flight Review (BFR)',
+        name: 'Flight Review',
         provider: { '@id': 'https://www.flight-levels.com/#joe' },
         description: 'FAA flight review from a CFI with 21+ years of experience and former Denver ARTCC controller. Based at KLMO, Longmont CO.',
         offers: { '@type': 'Offer', price: '100', priceCurrency: 'USD', priceSpecification: { '@type': 'UnitPriceSpecification', unitText: 'HOUR' } },
@@ -144,8 +144,8 @@ export default function Home() {
       <section id="about" className="px-8 py-24 max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="flex flex-col gap-4">
-            <img src="/joe-plane.png" alt="Joe Mattison with his aircraft at KLMO" className="w-full object-cover object-center rounded-2xl shadow-lg" />
-            <img src="/joe-cockpit.png" alt="Joe Mattison in the cockpit" className="w-full object-cover object-center rounded-2xl shadow-lg" />
+            <img src="/joe-plane.jpg" alt="Joe Mattison with his aircraft at KLMO" className="w-full object-cover object-center rounded-2xl shadow-lg" />
+            <img src="/joe-cockpit.jpg" alt="Joe Mattison in the cockpit" className="w-full object-cover object-center rounded-2xl shadow-lg" />
           </div>
           <div>
             <h2 className="text-3xl font-bold text-[#1e3a5f] mb-6">Hi, I'm Joe</h2>
@@ -307,13 +307,13 @@ export default function Home() {
 
               <div className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col">
                 <div className="text-4xl mb-4">📋</div>
-                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">Flight Review (BFR)</h3>
+                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">Flight Review</h3>
                 <p className="text-gray-500 text-sm mb-6 flex-1">
-                  Your required biennial flight review from a CFI who covers what actually matters, not just the minimum requirements. We'll talk through any areas where you want to sharpen up, and I'll give you an honest debrief at the end.
+                  Your required flight review from a CFI who covers what actually matters, not just the minimum requirements. We'll talk through any areas where you want to sharpen up, and I'll give you an honest debrief at the end.
                 </p>
-                <div className="text-sm text-gray-400 mb-4">$100 / hour · Typically 1–2 hours</div>
+                <div className="text-sm text-gray-400 mb-4">$100 / hour · Contact for scheduling</div>
                 <a href="#contact" className="block text-center border border-[#1d4ed8] text-[#1d4ed8] hover:bg-blue-50 px-4 py-2.5 rounded-lg text-sm font-medium transition">
-                  Schedule Your BFR
+                  Schedule Your Flight Review
                 </a>
               </div>
 
@@ -471,7 +471,7 @@ export default function Home() {
                 <option value="">Select a topic...</option>
                 <option value="Mountain Flying Instruction">Mountain Flying Instruction</option>
                 <option value="Destination Pilot: Flying into Colorado">Destination Pilot: Flying into Colorado</option>
-                <option value="Flight Review (BFR)">Flight Review (BFR)</option>
+                <option value="Flight Review">Flight Review</option>
                 <option value="Instrument Proficiency Check (IPC)">Instrument Proficiency Check (IPC)</option>
                 <option value="Mock Oral Checkride">Mock Oral Checkride</option>
                 <option value="Flight Instruction">Flight Instruction (General)</option>
