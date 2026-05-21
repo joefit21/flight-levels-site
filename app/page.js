@@ -230,6 +230,36 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Video grid */}
+          <div className="mb-4">
+            <p className="text-blue-200 text-sm text-center mb-4 opacity-70">Footage from actual flights in the Colorado Rockies</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+              {[
+                { id: 'qxJuVqJi21c', label: 'Landing at Steamboat Springs (KSBS)', sub: '6,882 MSL' },
+                { id: '58AGi-iaCRs', label: 'Steamboat Ski Area from the Air', sub: null },
+                { id: '6A7-qJr-Gu4', label: 'Crossing Rollins Pass', sub: 'Westbound · ~11,671 MSL' },
+                { id: 'ii_a2kk0wsM', label: 'Crossing Rollins Pass', sub: 'Eastbound · ~11,671 MSL' },
+              ].map((v) => (
+                <div key={v.id} className="rounded-2xl overflow-hidden">
+                  <div className="aspect-video">
+                    <iframe
+                      src={`https://www.youtube-nocookie.com/embed/${v.id}?rel=0`}
+                      title={v.label}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      loading="lazy"
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <div className="px-4 py-2.5 bg-white/5 border-t border-white/10">
+                    <p className="text-white text-sm font-medium">{v.label}</p>
+                    {v.sub && <p className="text-blue-300 text-xs mt-0.5">{v.sub}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Photo strip */}
           <div className="grid grid-cols-2 gap-4 mb-10">
             <div className="relative group overflow-hidden rounded-2xl">
