@@ -73,6 +73,77 @@ export default function Home() {
         description: 'Simulated FAA oral checkride via FaceTime or Teams. Private, instrument, and commercial certificates.',
         offers: { '@type': 'Offer', price: '100', priceCurrency: 'USD', priceSpecification: { '@type': 'UnitPriceSpecification', unitText: 'HOUR' } },
       },
+      {
+        '@type': 'LocalBusiness',
+        '@id': 'https://www.flight-levels.com/#business',
+        name: 'Flight Levels',
+        description: 'Flight instruction and aviation training by Joe Mattison, CFI/CFII and former Denver ARTCC controller, based at Longmont Municipal Airport (KLMO), Longmont, Colorado. Specializes in mountain flying, flight reviews, IPCs, and destination pilot orientation for pilots flying into Colorado.',
+        url: 'https://www.flight-levels.com',
+        email: 'joe@flight-levels.com',
+        founder: { '@id': 'https://www.flight-levels.com/#joe' },
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Longmont',
+          addressRegion: 'CO',
+          addressCountry: 'US',
+        },
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: 40.1622,
+          longitude: -105.1022,
+        },
+        areaServed: [
+          { '@type': 'State', name: 'Colorado' },
+          { '@type': 'Country', name: 'United States' },
+        ],
+        priceRange: '$100/hour',
+        sameAs: ['https://www.youtube.com/@Flight-Levels'],
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'What is mountain flying instruction?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Mountain flying instruction covers the skills and knowledge needed to fly safely in high-elevation terrain. This includes density altitude operations, terrain flying technique, Rocky Mountain weather decision-making, high-altitude airport procedures, and understanding Denver ARTCC airspace. Joe Mattison provides mountain flying instruction based at KLMO in Longmont, Colorado.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Do I need to be based in Colorado to get mountain flying instruction?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'No. Joe Mattison offers destination pilot orientation specifically for pilots flying into Colorado from out of state. This can include a pre-trip airspace and terrain briefing, an on-arrival orientation flight, or both. It is designed for pilots who have a trip to Colorado planned and want local expert guidance before flying on their own.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Where is Joe Mattison based?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Joe Mattison is based at Longmont Municipal Airport (KLMO), elevation 5,000 MSL, in Longmont, Colorado. KLMO is located on the Front Range at the base of the Rocky Mountains.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What is a flight review and who needs one?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'A flight review is an FAA-required evaluation for all certificated pilots. It consists of at least one hour of ground instruction and one hour of flight with a CFI. Pilots must complete a flight review every 24 calendar months to exercise the privileges of their pilot certificate. Joe Mattison conducts flight reviews at KLMO in Longmont, Colorado.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'What is an Instrument Proficiency Check (IPC)?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'An Instrument Proficiency Check (IPC) is required for instrument-rated pilots who have not met IFR currency requirements (6 approaches, holds, and intercepting/tracking in the past 6 months). A CFII conducts the IPC to verify the pilot meets instrument standards. Joe Mattison offers IPCs with a focus on Rocky Mountain IFR operations and Denver Center procedures.',
+            },
+          },
+        ],
+      },
     ],
   }
 
