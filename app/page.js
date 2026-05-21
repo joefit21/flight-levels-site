@@ -249,7 +249,7 @@ export default function Home() {
                 className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
-                <p className="text-white text-sm font-medium">Telluride Regional (KTEX) · 9,078 MSL</p>
+                <p className="text-white text-sm font-medium">Telluride Regional (KTEX) · 9,070 MSL</p>
               </div>
             </div>
           </div>
