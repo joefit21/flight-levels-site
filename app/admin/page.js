@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 const FIXED_EXPENSES = [
   { name: 'Apple Developer Program', amount: 8.25,  note: '$99/year' },
+  { name: 'Claude Pro (claude.ai)',  amount: 20,    note: 'AI coding assistant' },
   { name: 'Vercel',                  amount: 0,     note: 'Free tier' },
   { name: 'Supabase',                amount: 0,     note: 'Free tier' },
   { name: 'RevenueCat',              amount: 0,     note: 'Free under $2,500 MRR' },
