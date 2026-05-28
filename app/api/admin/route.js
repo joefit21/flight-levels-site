@@ -143,16 +143,8 @@ async function fetchRevenueCat() {
       'Content-Type': 'application/json',
     }
 
-    // Get projects list first
-    const projectsRes = await fetch('https://api.revenuecat.com/v2/projects', { headers })
-    const projects = await projectsRes.json()
-
-    if (projects.type === 'authentication_error') {
-      return { error: 'Invalid RevenueCat key — needs secret key from Project Settings > API Keys' }
-    }
-
-    const projectId = projects.items?.[0]?.id
-    if (!projectId) return { error: 'No RevenueCat projects found' }
+    // Use hardcoded project ID (visible in RevenueCat dashboard) or env override
+    const projectId = process.env.REVENUECAT_PROJECT_ID || 'proj54ac425e'
 
     // Get overview metrics
     const overviewRes = await fetch(
