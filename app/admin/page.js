@@ -237,9 +237,9 @@ export default function AdminDashboard() {
               </>
             )}
 
-            {/* Debug — shows raw metric IDs from RevenueCat; remove once confirmed */}
-            {rc.metricIds?.length > 0 && (
-              <div className="mt-2 text-xs text-gray-300">RC metrics: {rc.metricIds.join(', ')}</div>
+            {/* Temp debug — shows raw RevenueCat response */}
+            {rc.rawDebug && (
+              <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-400 break-all">{rc.rawDebug}</div>
             )}
             {rc.error && (
               <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs text-amber-700">⚠️ {rc.error}</div>

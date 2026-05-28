@@ -153,13 +153,16 @@ async function fetchRevenueCat() {
     )
     const overview = await overviewRes.json()
 
-    // Extract key metrics into a flat map
+    // Handle both array response and object-with-metrics response
+    const metricsArr = Array.isArray(overview)
+      ? overview
+      : (overview.metrics || overview.data || [])
+
     const metricsMap = {}
-    for (const m of (overview.metrics || [])) {
+    for (const m of metricsArr) {
       metricsMap[m.id] = m.value
     }
 
-    // Try multiple possible field name variants
     const activeSubscriptions =
       metricsMap['active_subscriptions'] ??
       metricsMap['active_subscribers']   ??
@@ -175,9 +178,10 @@ async function fetchRevenueCat() {
       projectId,
       activeSubscriptions,
       mrr,
-      revenue:   metricsMap['revenue'] ?? metricsMap['revenue_usd'] ?? null,
-      metricIds: Object.keys(metricsMap), // debug — remove once confirmed working
-      metrics:   overview.metrics || [],
+      revenue:    metricsMap['revenue'] ?? metricsMap['revenue_usd'] ?? null,
+      metricIds:  Object.keys(metricsMap),
+      rawDebug:   JSON.stringify(overview).slice(0, 600), // temp debug
+      metrics:    metricsArr,
     }
   } catch (err) {
     return { error: err.message }
