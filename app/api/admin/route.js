@@ -159,12 +159,25 @@ async function fetchRevenueCat() {
       metricsMap[m.id] = m.value
     }
 
+    // Try multiple possible field name variants
+    const activeSubscriptions =
+      metricsMap['active_subscriptions'] ??
+      metricsMap['active_subscribers']   ??
+      null
+
+    const mrr =
+      metricsMap['mrr']                       ??
+      metricsMap['monthly_recurring_revenue'] ??
+      metricsMap['mrr_usd']                   ??
+      null
+
     return {
       projectId,
-      activeSubscriptions: metricsMap['active_subscriptions'] ?? null,
-      mrr:                 metricsMap['mrr']                 ?? null,
-      revenue:             metricsMap['revenue']             ?? null,
-      metrics:             overview.metrics || [],
+      activeSubscriptions,
+      mrr,
+      revenue:   metricsMap['revenue'] ?? metricsMap['revenue_usd'] ?? null,
+      metricIds: Object.keys(metricsMap), // debug — remove once confirmed working
+      metrics:   overview.metrics || [],
     }
   } catch (err) {
     return { error: err.message }

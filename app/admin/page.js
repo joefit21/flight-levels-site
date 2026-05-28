@@ -237,6 +237,14 @@ export default function AdminDashboard() {
               </>
             )}
 
+            {/* Debug — shows raw metric IDs from RevenueCat; remove once confirmed */}
+            {rc.metricIds?.length > 0 && (
+              <div className="mt-2 text-xs text-gray-300">RC metrics: {rc.metricIds.join(', ')}</div>
+            )}
+            {rc.error && (
+              <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs text-amber-700">⚠️ {rc.error}</div>
+            )}
+
             <div className="flex justify-between items-center pt-3 mt-2 border-t-2 border-gray-100">
               <span className="text-xs font-bold uppercase tracking-wider text-gray-400">App Store Total</span>
               <span className="text-lg font-bold text-green-600">{fmt(appleNet)}</span>
