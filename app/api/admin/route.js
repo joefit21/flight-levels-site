@@ -153,10 +153,18 @@ async function fetchRevenueCat() {
     )
     const overview = await overviewRes.json()
 
+    // Extract key metrics into a flat map
+    const metricsMap = {}
+    for (const m of (overview.metrics || [])) {
+      metricsMap[m.id] = m.value
+    }
+
     return {
       projectId,
-      metrics: overview.metrics || [],
-      raw: overview,
+      activeSubscriptions: metricsMap['active_subscriptions'] ?? null,
+      mrr:                 metricsMap['mrr']                 ?? null,
+      revenue:             metricsMap['revenue']             ?? null,
+      metrics:             overview.metrics || [],
     }
   } catch (err) {
     return { error: err.message }

@@ -77,11 +77,15 @@ export default function AdminDashboard() {
   // ── Calculations ──────────────────────────────────────────────
   const stripe = data?.stripe || {}
 
-  // Apple/RevCat income (manual)
+  // Apple/RevCat income — auto from RevenueCat MRR if available, else manual
+  const rc             = data?.revenuecat || {}
+  const rcHasData      = rc.mrr != null && rc.activeSubscriptions != null
   const cpAppleNet     = (parseFloat(rcSubs.cp_apple)     || 0) * 29 * APPLE_NET_RATE
   const atcAppleNet    = (parseFloat(rcSubs.atc_apple)    || 0) * 29 * APPLE_NET_RATE
   const bundleAppleNet = (parseFloat(rcSubs.bundle_apple) || 0) * 49 * APPLE_NET_RATE
-  const appleNet       = cpAppleNet + atcAppleNet + bundleAppleNet
+  const appleNetManual = cpAppleNet + atcAppleNet + bundleAppleNet
+  // RevenueCat MRR is gross; apply same net rate
+  const appleNet       = rcHasData ? (rc.mrr * APPLE_NET_RATE) : appleNetManual
 
   // Stripe income (auto)
   const stripeNet = (stripe.monthlyRevenue
@@ -164,39 +168,73 @@ export default function AdminDashboard() {
 
         <div className="grid md:grid-cols-2 gap-6">
 
-          {/* ── App Store Income (manual) ── */}
+          {/* ── App Store Income ── */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">📱 App Store Income <span className="text-xs font-normal normal-case text-gray-300">(enter subscriber counts)</span></h2>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">
+              📱 App Store Income{' '}
+              <span className="text-xs font-normal normal-case text-gray-300">
+                {rcHasData ? '(auto-loaded)' : '(enter subscriber counts)'}
+              </span>
+            </h2>
 
-            {[
-              { id: 'cp_apple',     label: 'Checkride Prep',  price: 29 },
-              { id: 'atc_apple',    label: 'ATC Trainer',     price: 29 },
-              { id: 'bundle_apple', label: 'Bundle',          price: 49 },
-            ].map(({ id, label, price }) => (
-              <div key={id} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-                <div>
-                  <div className="text-sm font-medium">{label}</div>
-                  <div className="text-xs text-gray-400">${price}/mo · ~{fmt(price * APPLE_NET_RATE)} net per sub</div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="number" min="0"
-                    value={rcSubs[id]}
-                    onChange={e => setRcSubs(p => ({ ...p, [id]: e.target.value }))}
-                    className="w-16 border border-gray-200 rounded-lg px-2 py-1.5 text-center text-sm bg-gray-50 focus:outline-none focus:border-blue-400"
-                    placeholder="0"
-                  />
-                  <div className="text-sm font-semibold text-green-600 w-16 text-right">
-                    {fmt((parseFloat(rcSubs[id]) || 0) * price * APPLE_NET_RATE)}
+            {rcHasData ? (
+              // Auto mode — RevenueCat has data
+              <>
+                <div className="flex items-center justify-between py-2.5 border-b border-gray-50">
+                  <div>
+                    <div className="text-sm font-medium">Active subscribers</div>
+                    <div className="text-xs text-gray-400">All products combined</div>
                   </div>
+                  <div className="text-sm font-semibold text-blue-600">{rc.activeSubscriptions}</div>
                 </div>
-              </div>
-            ))}
-
-            {data?.revenuecat?.error && (
-              <div className="mt-3 bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-700">
-                ⚠️ RevenueCat: {data.revenuecat.error}
-              </div>
+                <div className="flex items-center justify-between py-2.5 border-b border-gray-50">
+                  <div>
+                    <div className="text-sm font-medium">Gross MRR</div>
+                    <div className="text-xs text-gray-400">Before Apple & RevenueCat fees</div>
+                  </div>
+                  <div className="text-sm font-semibold text-blue-600">{fmt(rc.mrr)}</div>
+                </div>
+                <div className="flex items-center justify-between py-2.5">
+                  <div>
+                    <div className="text-sm font-medium">Net MRR</div>
+                    <div className="text-xs text-gray-400">After Apple 15% + RevCat 1%</div>
+                  </div>
+                  <div className="text-sm font-semibold text-green-600">{fmt(rc.mrr * APPLE_NET_RATE)}</div>
+                </div>
+              </>
+            ) : (
+              // Manual fallback
+              <>
+                {[
+                  { id: 'cp_apple',     label: 'Checkride Prep',  price: 29 },
+                  { id: 'atc_apple',    label: 'ATC Trainer',     price: 29 },
+                  { id: 'bundle_apple', label: 'Bundle',          price: 49 },
+                ].map(({ id, label, price }) => (
+                  <div key={id} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
+                    <div>
+                      <div className="text-sm font-medium">{label}</div>
+                      <div className="text-xs text-gray-400">${price}/mo · ~{fmt(price * APPLE_NET_RATE)} net per sub</div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="number" min="0"
+                        value={rcSubs[id]}
+                        onChange={e => setRcSubs(p => ({ ...p, [id]: e.target.value }))}
+                        className="w-16 border border-gray-200 rounded-lg px-2 py-1.5 text-center text-sm bg-gray-50 focus:outline-none focus:border-blue-400"
+                        placeholder="0"
+                      />
+                      <div className="text-sm font-semibold text-green-600 w-16 text-right">
+                        {fmt((parseFloat(rcSubs[id]) || 0) * price * APPLE_NET_RATE)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {rc.error && (
+                  <div className="mt-3 bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-700">
+                    ⚠️ RevenueCat: {rc.error}
+                  </div>
+                )}
+              </>
             )}
 
             <div className="flex justify-between items-center pt-3 mt-2 border-t-2 border-gray-100">
