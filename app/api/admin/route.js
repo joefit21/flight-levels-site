@@ -8,12 +8,13 @@ export async function GET(req) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const [stripe, revenuecat] = await Promise.all([
+  const [stripe, revenuecat, anthropic] = await Promise.all([
     fetchStripe(),
     fetchRevenueCat(),
+    fetchAnthropicUsage(),
   ])
 
-  return Response.json({ stripe, revenuecat, fetchedAt: new Date().toISOString() })
+  return Response.json({ stripe, revenuecat, anthropic, fetchedAt: new Date().toISOString() })
 }
 
 // ── Stripe ────────────────────────────────────────────────────────
@@ -94,6 +95,38 @@ async function fetchStripe() {
         description: c.description || 'Charge',
       })),
     }
+  } catch (err) {
+    return { error: err.message }
+  }
+}
+
+// ── Anthropic Usage (via Supabase token log) ──────────────────────
+async function fetchAnthropicUsage() {
+  const url = process.env.SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) return { error: 'No Supabase credentials configured' }
+
+  try {
+    const startOfMonth = new Date()
+    startOfMonth.setDate(1)
+    startOfMonth.setHours(0, 0, 0, 0)
+
+    const res = await fetch(
+      `${url}/rest/v1/api_usage?created_at=gte.${startOfMonth.toISOString()}&select=input_tokens,output_tokens`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } }
+    )
+    const rows = await res.json()
+    if (!Array.isArray(rows)) return { error: 'Unexpected Supabase response' }
+
+    const totalInput  = rows.reduce((s, r) => s + (r.input_tokens  || 0), 0)
+    const totalOutput = rows.reduce((s, r) => s + (r.output_tokens || 0), 0)
+
+    // claude-sonnet-4-6: $3/MTok input · $15/MTok output
+    const estimatedCost = Math.round(
+      ((totalInput * 3) + (totalOutput * 15)) / 1_000_000 * 100
+    ) / 100
+
+    return { totalCalls: rows.length, totalInputTokens: totalInput, totalOutputTokens: totalOutput, estimatedCost }
   } catch (err) {
     return { error: err.message }
   }

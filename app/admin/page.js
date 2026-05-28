@@ -99,10 +99,11 @@ export default function AdminDashboard() {
   const totalNet = appleNet + stripeThisMonthNet + instrNet
 
   // Expenses
-  const fixedTotal = FIXED_EXPENSES.reduce((s, e) => s + e.amount, 0)
-  const extraTotal = extraExpenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0)
-  const anthropic  = parseFloat(anthropicCost) || 0
-  const totalExp   = fixedTotal + extraTotal + anthropic
+  const fixedTotal        = FIXED_EXPENSES.reduce((s, e) => s + e.amount, 0)
+  const extraTotal        = extraExpenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0)
+  const anthropicEstimated = data?.anthropic?.estimatedCost ?? 0
+  const anthropic          = parseFloat(anthropicCost) || anthropicEstimated
+  const totalExp           = fixedTotal + extraTotal + anthropic
 
   const netProfit  = totalNet - totalExp
 
@@ -329,20 +330,36 @@ export default function AdminDashboard() {
               </div>
             ))}
 
-            {/* Anthropic — manual */}
-            <div className="flex items-center justify-between py-2 border-b border-gray-50">
-              <div>
-                <div className="text-sm font-medium">Anthropic API</div>
-                <div className="text-xs text-gray-400">Variable — enter actual charge</div>
+            {/* Anthropic — auto-calculated from Supabase token log */}
+            <div className="py-2 border-b border-gray-50">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-medium">Anthropic API</div>
+                  {data?.anthropic?.totalCalls != null ? (
+                    <div className="text-xs text-gray-400">
+                      {data.anthropic.totalCalls} calls · {Math.round(data.anthropic.totalInputTokens / 1000)}K in / {Math.round(data.anthropic.totalOutputTokens / 1000)}K out tokens
+                    </div>
+                  ) : (
+                    <div className="text-xs text-gray-400">Variable · auto-tracking active</div>
+                  )}
+                </div>
+                <div className="text-sm font-semibold text-red-500">
+                  {anthropicCost
+                    ? fmt(parseFloat(anthropicCost))
+                    : data?.anthropic?.estimatedCost != null
+                      ? <>{fmt(data.anthropic.estimatedCost)} <span className="text-xs font-normal text-gray-300">est.</span></>
+                      : <span className="text-gray-300">$0.00</span>}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-xs text-gray-300">Actual bill override:</span>
                 <span className="text-xs text-gray-400">$</span>
                 <input
                   type="number" min="0" step="0.01"
                   value={anthropicCost}
                   onChange={e => setAnthropicCost(e.target.value)}
-                  className="w-20 border border-gray-200 rounded-lg px-2 py-1.5 text-right text-sm bg-gray-50 focus:outline-none focus:border-blue-400"
-                  placeholder="0.00"
+                  className="w-20 border border-gray-200 rounded-lg px-2 py-1.5 text-right text-xs bg-gray-50 focus:outline-none focus:border-blue-400"
+                  placeholder={data?.anthropic?.estimatedCost != null ? data.anthropic.estimatedCost.toFixed(2) : '0.00'}
                 />
               </div>
             </div>
