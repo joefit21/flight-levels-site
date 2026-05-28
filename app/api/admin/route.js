@@ -179,8 +179,6 @@ async function fetchRevenueCat() {
       activeSubscriptions,
       mrr,
       revenue:    metricsMap['revenue'] ?? metricsMap['revenue_usd'] ?? null,
-      metricIds:  Object.keys(metricsMap),
-      rawDebug:   JSON.stringify(overview).slice(0, 600), // temp debug
       metrics:    metricsArr,
     }
   } catch (err) {

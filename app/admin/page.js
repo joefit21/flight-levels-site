@@ -237,10 +237,6 @@ export default function AdminDashboard() {
               </>
             )}
 
-            {/* Temp debug — shows raw RevenueCat response */}
-            {rc.rawDebug && (
-              <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-400 break-all">{rc.rawDebug}</div>
-            )}
             {rc.error && (
               <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-xs text-amber-700">⚠️ {rc.error}</div>
             )}
