@@ -44,7 +44,6 @@ export default function AdminDashboard() {
   const [newName, setNewName]           = useState('')
   const [newAmt, setNewAmt]             = useState('')
   const [rcSubs, setRcSubs]             = useState({ cp_apple: '', atc_apple: '', bundle_apple: '' })
-  const [instrIncome, setInstrIncome]   = useState({ hours: '', oral: '', other: '' })
 
   // Restore saved password
   useEffect(() => {
@@ -92,11 +91,7 @@ export default function AdminDashboard() {
   const stripeThisMonth = (stripe.monthlyRevenue?.[currentMonthKey] || 0)
   const stripeThisMonthNet = stripeThisMonth * (1 - 0.029) - (stripeThisMonth > 0 ? 0.30 : 0)
 
-  // Instruction
-  const instrNet = ((parseFloat(instrIncome.hours) || 0) + (parseFloat(instrIncome.oral) || 0)) * 100
-                 + (parseFloat(instrIncome.other) || 0)
-
-  const totalNet = appleNet + stripeThisMonthNet + instrNet
+  const totalNet = appleNet + stripeThisMonthNet
 
   // Expenses
   const fixedTotal        = FIXED_EXPENSES.reduce((s, e) => s + e.amount, 0)
@@ -161,7 +156,7 @@ export default function AdminDashboard() {
         {/* Summary cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
           <StatCard label="Net This Month" value={fmtInt(netProfit)} sub="After all fees & costs" color={netProfit >= 0 ? 'green' : 'red'} />
-          <StatCard label="Total Income" value={fmtInt(totalNet)} sub="App Store + Web + Instruction" color="blue" />
+          <StatCard label="Total Income" value={fmtInt(totalNet)} sub="App Store + Web" color="blue" />
           <StatCard label="Total Expenses" value={fmtInt(totalExp)} sub="Tools & subscriptions" color="red" />
           <StatCard label="Stripe Pending" value={fmt(stripe.pendingBalance)} sub="Arriving in ~2 days" color="purple" />
         </div>
@@ -264,54 +259,6 @@ export default function AdminDashboard() {
             <div className="flex justify-between items-center pt-3 mt-2 border-t-2 border-gray-100">
               <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Web Total (net)</span>
               <span className="text-lg font-bold text-green-600">{fmt(stripeThisMonthNet)}</span>
-            </div>
-          </div>
-
-          {/* ── Instruction Income ── */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">🛩️ Instruction Income</h2>
-            {[
-              { id: 'hours', label: 'Flight instruction',  note: '$100/hr' },
-              { id: 'oral',  label: 'Mock oral checkrides', note: '$100/hr' },
-            ].map(({ id, label, note }) => (
-              <div key={id} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
-                <div>
-                  <div className="text-sm font-medium">{label}</div>
-                  <div className="text-xs text-gray-400">{note}</div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="number" min="0" step="0.5"
-                    value={instrIncome[id]}
-                    onChange={e => setInstrIncome(p => ({ ...p, [id]: e.target.value }))}
-                    className="w-16 border border-gray-200 rounded-lg px-2 py-1.5 text-center text-sm bg-gray-50 focus:outline-none focus:border-blue-400"
-                    placeholder="hrs"
-                  />
-                  <div className="text-sm font-semibold text-green-600 w-16 text-right">
-                    {fmt((parseFloat(instrIncome[id]) || 0) * 100)}
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div className="flex items-center justify-between py-2.5">
-              <div>
-                <div className="text-sm font-medium">Other</div>
-                <div className="text-xs text-gray-400">Enter dollar amount</div>
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="number" min="0"
-                  value={instrIncome.other}
-                  onChange={e => setInstrIncome(p => ({ ...p, other: e.target.value }))}
-                  className="w-16 border border-gray-200 rounded-lg px-2 py-1.5 text-center text-sm bg-gray-50 focus:outline-none focus:border-blue-400"
-                  placeholder="$"
-                />
-                <div className="text-sm font-semibold text-green-600 w-16 text-right">{fmt(parseFloat(instrIncome.other) || 0)}</div>
-              </div>
-            </div>
-            <div className="flex justify-between items-center pt-3 mt-2 border-t-2 border-gray-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Instruction Total</span>
-              <span className="text-lg font-bold text-green-600">{fmt(instrNet)}</span>
             </div>
           </div>
 
