@@ -151,19 +151,33 @@ async function fetchSubscriberHistory() {
   const stripeHistory = Object.fromEntries(days.map(d => [d, 0]))
   try {
     const headers = { Authorization: 'Basic ' + Buffer.from(stripeKey + ':').toString('base64') }
-    const res  = await fetch('https://api.stripe.com/v1/subscriptions?limit=100&status=all', { headers })
+    const res  = await fetch(
+      'https://api.stripe.com/v1/subscriptions?limit=100&status=all&expand%5B%5D=data.customer',
+      { headers }
+    )
     const data = await res.json()
+
+    const isActive = (s, dayStart, dayEnd) => {
+      if (s.created >= dayEnd) return false
+      if (s.cancel_at_period_end) return false
+      if (['active', 'past_due', 'trialing'].includes(s.status)) return true
+      if (s.status === 'canceled') return s.canceled_at && s.canceled_at > dayStart
+      return false
+    }
+
     for (const day of days) {
       const dayStart = new Date(day).getTime() / 1000
       const dayEnd   = dayStart + 86400
-      stripeHistory[day] = (data.data || []).filter(s => {
-        if (s.created >= dayEnd) return false       // not created yet on this day
-        if (s.cancel_at_period_end) return false    // user cancelled — don't count even in grace period
-        if (['active', 'past_due', 'trialing'].includes(s.status)) return true
-        if (s.status === 'canceled') return s.canceled_at && s.canceled_at > dayStart
-        return false
-      }).length
+      stripeHistory[day] = (data.data || []).filter(s => isActive(s, dayStart, dayEnd)).length
     }
+
+    // Store today's active subscriber emails for the dashboard
+    const todayStart = new Date(days[days.length - 1]).getTime() / 1000
+    const todayEnd   = todayStart + 86400
+    stripeHistory.__emails = (data.data || [])
+      .filter(s => isActive(s, todayStart, todayEnd))
+      .map(s => (typeof s.customer === 'object' ? s.customer?.email : null))
+      .filter(Boolean)
   } catch (e) { console.error('Stripe history error:', e.message) }
 
   // ── RevenueCat daily counts ──────────────────────────────────────
@@ -208,6 +222,7 @@ async function fetchSubscriberHistory() {
       appStore: rcHistory[date],
       total:    stripeHistory[date] + rcHistory[date],
     })),
+    activeEmails: stripeHistory.__emails || [],
   }
 }
 

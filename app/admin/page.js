@@ -470,10 +470,22 @@ export default function AdminDashboard() {
             </div>
             <LineChart data={data.subscribers.history} />
             <div className="flex justify-between mt-3 text-xs text-gray-400">
-              <span>Web subscribers today: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.stripe ?? '—'}</strong></span>
-              <span>App Store subscribers today: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.appStore ?? '—'}</strong></span>
+              <span>Web: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.stripe ?? '—'}</strong></span>
+              <span>App Store: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.appStore ?? '—'}</strong></span>
               <span>Total: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.total ?? '—'}</strong></span>
             </div>
+            {data.subscribers.activeEmails?.length > 0 && (
+              <details className="mt-3">
+                <summary className="text-xs text-gray-400 cursor-pointer select-none">
+                  Active web subscribers ({data.subscribers.activeEmails.length})
+                </summary>
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {data.subscribers.activeEmails.map((email, i) => (
+                    <span key={i} className="text-xs bg-gray-50 border border-gray-100 rounded px-2 py-0.5 text-gray-500">{email}</span>
+                  ))}
+                </div>
+              </details>
+            )}
           </div>
         )}
 
