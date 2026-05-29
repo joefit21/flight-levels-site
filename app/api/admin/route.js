@@ -155,9 +155,12 @@ async function fetchSubscriberHistory() {
     for (const day of days) {
       const dayStart = new Date(day).getTime() / 1000
       const dayEnd   = dayStart + 86400
-      stripeHistory[day] = (data.data || []).filter(s =>
-        s.created < dayEnd && (!s.canceled_at || s.canceled_at > dayStart)
-      ).length
+      stripeHistory[day] = (data.data || []).filter(s => {
+        if (s.created >= dayEnd) return false  // not created yet on this day
+        if (['active', 'past_due', 'trialing'].includes(s.status)) return true
+        if (s.status === 'canceled') return s.canceled_at && s.canceled_at > dayStart
+        return false
+      }).length
     }
   } catch (e) { console.error('Stripe history error:', e.message) }
 
@@ -188,9 +191,10 @@ async function fetchSubscriberHistory() {
       const metricsArr  = Array.isArray(overview) ? overview : (overview.metrics || overview.data || [])
       const metricsMap  = Object.fromEntries(metricsArr.map(m => [m.id, m.value]))
       const currentCount = metricsMap['active_subscriptions'] ?? metricsMap['active_subscribers'] ?? 0
-      // Fill all days with current count — flat line, best we can do without historical data
+      // Fill days from first known subscriber date onward
+      const RC_SUBSCRIBER_START = '2026-05-26' // date first App Store subscriber joined
       if (currentCount > 0) {
-        for (const day of days) rcHistory[day] = currentCount
+        for (const day of days) rcHistory[day] = day >= RC_SUBSCRIBER_START ? currentCount : 0
       }
     }
   } catch (e) { console.error('RC history error:', e.message) }
