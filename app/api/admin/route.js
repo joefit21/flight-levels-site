@@ -156,7 +156,8 @@ async function fetchSubscriberHistory() {
       const dayStart = new Date(day).getTime() / 1000
       const dayEnd   = dayStart + 86400
       stripeHistory[day] = (data.data || []).filter(s => {
-        if (s.created >= dayEnd) return false  // not created yet on this day
+        if (s.created >= dayEnd) return false       // not created yet on this day
+        if (s.cancel_at_period_end) return false    // user cancelled — don't count even in grace period
         if (['active', 'past_due', 'trialing'].includes(s.status)) return true
         if (s.status === 'canceled') return s.canceled_at && s.canceled_at > dayStart
         return false
