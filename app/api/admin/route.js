@@ -8,13 +8,14 @@ export async function GET(req) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const [stripe, revenuecat, anthropic] = await Promise.all([
+  const [stripe, revenuecat, anthropic, subscribers] = await Promise.all([
     fetchStripe(),
     fetchRevenueCat(),
     fetchAnthropicUsage(),
+    fetchSubscriberHistory(),
   ])
 
-  return Response.json({ stripe, revenuecat, anthropic, fetchedAt: new Date().toISOString() })
+  return Response.json({ stripe, revenuecat, anthropic, subscribers, fetchedAt: new Date().toISOString() })
 }
 
 // ── Stripe ────────────────────────────────────────────────────────
@@ -129,6 +130,61 @@ async function fetchAnthropicUsage() {
     return { totalCalls: rows.length, totalInputTokens: totalInput, totalOutputTokens: totalOutput, estimatedCost }
   } catch (err) {
     return { error: err.message }
+  }
+}
+
+// ── Subscriber History (Stripe + RevenueCat daily counts) ─────────
+async function fetchSubscriberHistory() {
+  const stripeKey = process.env.STRIPE_SECRET_KEY
+  const rcKey     = process.env.REVENUECAT_API_KEY
+  const projectId = process.env.REVENUECAT_PROJECT_ID || 'proj54ac425e'
+
+  // 42 days = 6 weeks, oldest first
+  const days = Array.from({ length: 42 }, (_, i) => {
+    const d = new Date()
+    d.setDate(d.getDate() - (41 - i))
+    return d.toISOString().slice(0, 10)
+  })
+
+  // ── Stripe daily counts ──────────────────────────────────────────
+  const stripeHistory = Object.fromEntries(days.map(d => [d, 0]))
+  try {
+    const headers = { Authorization: 'Basic ' + Buffer.from(stripeKey + ':').toString('base64') }
+    const res  = await fetch('https://api.stripe.com/v1/subscriptions?limit=100&status=all', { headers })
+    const data = await res.json()
+    for (const day of days) {
+      const dayStart = new Date(day).getTime() / 1000
+      const dayEnd   = dayStart + 86400
+      stripeHistory[day] = (data.data || []).filter(s =>
+        s.created < dayEnd && (!s.canceled_at || s.canceled_at > dayStart)
+      ).length
+    }
+  } catch (e) { console.error('Stripe history error:', e.message) }
+
+  // ── RevenueCat daily counts ──────────────────────────────────────
+  const rcHistory = Object.fromEntries(days.map(d => [d, 0]))
+  try {
+    const headers  = { Authorization: `Bearer ${rcKey}`, 'Content-Type': 'application/json' }
+    const start    = encodeURIComponent(days[0] + 'T00:00:00Z')
+    const end      = encodeURIComponent(days[days.length - 1] + 'T23:59:59Z')
+    const res      = await fetch(
+      `https://api.revenuecat.com/v2/projects/${projectId}/charts/active_subscriptions?resolution=P1D&start_time=${start}&end_time=${end}`,
+      { headers }
+    )
+    const chart = await res.json()
+    for (const pt of (chart.values || chart.data || [])) {
+      const dateKey = (pt.date || pt.period || '').slice(0, 10)
+      if (dateKey && rcHistory[dateKey] !== undefined) rcHistory[dateKey] = pt.value || 0
+    }
+  } catch (e) { console.error('RC history error:', e.message) }
+
+  return {
+    history: days.map(date => ({
+      date,
+      stripe:   stripeHistory[date],
+      appStore: rcHistory[date],
+      total:    stripeHistory[date] + rcHistory[date],
+    })),
   }
 }
 

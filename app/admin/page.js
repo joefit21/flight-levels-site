@@ -22,6 +22,46 @@ function fmtInt(n) {
   return '$' + Math.round(n || 0).toLocaleString('en-US')
 }
 
+function LineChart({ data }) {
+  if (!data?.length) return (
+    <div className="h-32 flex items-center justify-center text-xs text-gray-300">No data yet</div>
+  )
+  const W = 560, H = 160, PL = 28, PR = 10, PT = 10, PB = 24
+  const cW = W - PL - PR, cH = H - PT - PB
+  const maxVal = Math.max(...data.map(d => d.total), 2)
+  const yTop   = Math.ceil(maxVal * 1.2)
+  const yTicks = [0, Math.round(yTop / 2), yTop]
+  const x  = i => PL + (i / Math.max(data.length - 1, 1)) * cW
+  const y  = v => PT + cH - Math.min((v / yTop) * cH, cH)
+  const pathD = key => data.map((d, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(d[key]).toFixed(1)}`).join(' ')
+  const xIdxs = [0, 7, 14, 21, 28, 35, 41].filter(i => i < data.length)
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }}>
+      <defs>
+        <linearGradient id="totalGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {yTicks.map(v => <line key={v} x1={PL} y1={y(v)} x2={W-PR} y2={y(v)} stroke="#f3f4f6" strokeWidth="1" />)}
+      {xIdxs.map(i  => <line key={i} x1={x(i)} y1={PT} x2={x(i)} y2={H-PB} stroke="#f3f4f6" strokeWidth="1" />)}
+      <path d={`${pathD('total')} L${x(data.length-1).toFixed(1)},${y(0).toFixed(1)} L${x(0).toFixed(1)},${y(0).toFixed(1)} Z`} fill="url(#totalGrad)" />
+      <path d={pathD('stripe')}   fill="none" stroke="#3b82f6" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d={pathD('appStore')} fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d={pathD('total')}    fill="none" stroke="#6366f1" strokeWidth="2"   strokeLinejoin="round" />
+      {[['stripe','#3b82f6'],['appStore','#10b981'],['total','#6366f1']].map(([k,c]) => (
+        <circle key={k} cx={x(data.length-1)} cy={y(data[data.length-1][k])} r="3" fill={c} />
+      ))}
+      {yTicks.map(v => <text key={v} x={PL-4} y={y(v)+4} textAnchor="end" fontSize="9" fill="#9ca3af">{v}</text>)}
+      {xIdxs.map(i  => (
+        <text key={i} x={x(i)} y={H-4} textAnchor="middle" fontSize="9" fill="#9ca3af">
+          {new Date(data[i].date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        </text>
+      ))}
+    </svg>
+  )
+}
+
 function StatCard({ label, value, sub, color = 'blue' }) {
   const colors = { blue: 'text-blue-600', green: 'text-green-600', red: 'text-red-600', purple: 'text-purple-600' }
   return (
@@ -413,6 +453,26 @@ export default function AdminDashboard() {
                     <div className="text-xs text-gray-300">gross</div>
                   </div>
                 ))}
+            </div>
+          </div>
+        )}
+
+        {/* Subscriber Growth Chart */}
+        {data?.subscribers?.history?.length > 0 && (
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400">📈 Subscriber Growth — Last 6 Weeks</h2>
+              <div className="flex items-center gap-4 text-xs text-gray-400">
+                <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 bg-indigo-500 rounded"></span>Total</span>
+                <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 bg-blue-500 rounded"></span>Web</span>
+                <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 bg-emerald-500 rounded"></span>App Store</span>
+              </div>
+            </div>
+            <LineChart data={data.subscribers.history} />
+            <div className="flex justify-between mt-3 text-xs text-gray-400">
+              <span>Web subscribers today: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.stripe ?? '—'}</strong></span>
+              <span>App Store subscribers today: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.appStore ?? '—'}</strong></span>
+              <span>Total: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.total ?? '—'}</strong></span>
             </div>
           </div>
         )}
