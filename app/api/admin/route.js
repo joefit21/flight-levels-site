@@ -200,6 +200,28 @@ async function fetchSubscriberHistory() {
     }
   } catch (e) { console.error('RC history error:', e.message) }
 
+  // Debug: show what today's counted Stripe subs look like
+  const todayStr  = days[days.length - 1]
+  const todayStart = new Date(todayStr).getTime() / 1000
+  const todayEnd   = todayStart + 86400
+  let stripeDebugSubs = []
+  try {
+    const headers = { Authorization: 'Basic ' + Buffer.from(stripeKey + ':').toString('base64') }
+    const res  = await fetch('https://api.stripe.com/v1/subscriptions?limit=100&status=all', { headers })
+    const data = await res.json()
+    stripeDebugSubs = (data.data || [])
+      .filter(s => s.created < todayEnd)
+      .map(s => ({
+        status: s.status,
+        cancel_at_period_end: s.cancel_at_period_end,
+        canceled_at: s.canceled_at,
+        counted: s.created < todayEnd &&
+          !s.cancel_at_period_end &&
+          (['active','past_due','trialing'].includes(s.status) ||
+           (s.status === 'canceled' && s.canceled_at && s.canceled_at > todayStart)),
+      }))
+  } catch (e) {}
+
   return {
     history: days.map(date => ({
       date,
@@ -207,6 +229,7 @@ async function fetchSubscriberHistory() {
       appStore: rcHistory[date],
       total:    stripeHistory[date] + rcHistory[date],
     })),
+    stripeDebug: stripeDebugSubs,
   }
 }
 
