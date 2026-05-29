@@ -176,6 +176,23 @@ async function fetchSubscriberHistory() {
       const dateKey = (pt.date || pt.period || '').slice(0, 10)
       if (dateKey && rcHistory[dateKey] !== undefined) rcHistory[dateKey] = pt.value || 0
     }
+
+    // If charts API returned all zeros, fall back to current active count from overview
+    const allZero = Object.values(rcHistory).every(v => v === 0)
+    if (allZero) {
+      const overviewRes = await fetch(
+        `https://api.revenuecat.com/v2/projects/${projectId}/metrics/overview`,
+        { headers }
+      )
+      const overview    = await overviewRes.json()
+      const metricsArr  = Array.isArray(overview) ? overview : (overview.metrics || overview.data || [])
+      const metricsMap  = Object.fromEntries(metricsArr.map(m => [m.id, m.value]))
+      const currentCount = metricsMap['active_subscriptions'] ?? metricsMap['active_subscribers'] ?? 0
+      // Fill all days with current count — flat line, best we can do without historical data
+      if (currentCount > 0) {
+        for (const day of days) rcHistory[day] = currentCount
+      }
+    }
   } catch (e) { console.error('RC history error:', e.message) }
 
   return {
