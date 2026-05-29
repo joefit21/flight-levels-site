@@ -159,7 +159,7 @@ async function fetchSubscriberHistory() {
 
     const isActive = (s, dayStart, dayEnd) => {
       if (s.created >= dayEnd) return false
-      if (s.cancel_at_period_end) return false
+      if (s.cancel_at_period_end || s.cancel_at) return false  // scheduled to cancel — don't count
       if (['active', 'past_due', 'trialing'].includes(s.status)) return true
       if (s.status === 'canceled') return s.canceled_at && s.canceled_at > dayStart
       return false
