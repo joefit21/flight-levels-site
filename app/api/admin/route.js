@@ -181,36 +181,49 @@ async function fetchSubscriberHistory() {
   } catch (e) { console.error('Stripe history error:', e.message) }
 
   // ── RevenueCat daily counts ──────────────────────────────────────
+  // Strategy: fetch today's live count from RC overview, store it as a dated
+  // snapshot in Supabase, then read all stored snapshots for the chart.
+  // This builds an accurate history going forward, one day at a time.
   const rcHistory = Object.fromEntries(days.map(d => [d, 0]))
   try {
-    const headers  = { Authorization: `Bearer ${rcKey}`, 'Content-Type': 'application/json' }
-    const start    = encodeURIComponent(days[0] + 'T00:00:00Z')
-    const end      = encodeURIComponent(days[days.length - 1] + 'T23:59:59Z')
-    const res      = await fetch(
-      `https://api.revenuecat.com/v2/projects/${projectId}/charts/active_subscriptions?resolution=P1D&start_time=${start}&end_time=${end}`,
-      { headers }
+    const rcHeaders = { Authorization: `Bearer ${rcKey}`, 'Content-Type': 'application/json' }
+    const sbUrl     = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+    const sbKey     = process.env.SUPABASE_SERVICE_ROLE_KEY
+    const today     = new Date().toISOString().slice(0, 10)
+
+    // 1. Fetch today's active subscriber count from RC
+    const overviewRes = await fetch(
+      `https://api.revenuecat.com/v2/projects/${projectId}/metrics/overview`,
+      { headers: rcHeaders }
     )
-    const chart = await res.json()
-    for (const pt of (chart.values || chart.data || [])) {
-      const dateKey = (pt.date || pt.period || '').slice(0, 10)
-      if (dateKey && rcHistory[dateKey] !== undefined) rcHistory[dateKey] = pt.value || 0
+    const overview   = await overviewRes.json()
+    const metricsArr = Array.isArray(overview) ? overview : (overview.metrics || overview.data || [])
+    const metricsMap = Object.fromEntries(metricsArr.map(m => [m.id, m.value]))
+    const todayCount = metricsMap['active_subscriptions'] ?? metricsMap['active_subscribers'] ?? 0
+
+    // 2. Upsert today's count into Supabase snapshot table
+    if (sbUrl && sbKey && todayCount >= 0) {
+      await fetch(`${sbUrl}/rest/v1/rc_subscriber_snapshots`, {
+        method: 'POST',
+        headers: {
+          apikey: sbKey,
+          Authorization: `Bearer ${sbKey}`,
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates',
+        },
+        body: JSON.stringify({ date: today, count: todayCount }),
+      })
     }
 
-    // If charts API returned all zeros, fall back to current active count from overview
-    const allZero = Object.values(rcHistory).every(v => v === 0)
-    if (allZero) {
-      const overviewRes = await fetch(
-        `https://api.revenuecat.com/v2/projects/${projectId}/metrics/overview`,
-        { headers }
+    // 3. Read all snapshots within our 42-day window
+    if (sbUrl && sbKey) {
+      const snapshotRes = await fetch(
+        `${sbUrl}/rest/v1/rc_subscriber_snapshots?date=gte.${days[0]}&date=lte.${today}&select=date,count`,
+        { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` } }
       )
-      const overview    = await overviewRes.json()
-      const metricsArr  = Array.isArray(overview) ? overview : (overview.metrics || overview.data || [])
-      const metricsMap  = Object.fromEntries(metricsArr.map(m => [m.id, m.value]))
-      const currentCount = metricsMap['active_subscriptions'] ?? metricsMap['active_subscribers'] ?? 0
-      // Fill days from first known subscriber date onward
-      const RC_SUBSCRIBER_START = '2026-05-26' // date first App Store subscriber joined
-      if (currentCount > 0) {
-        for (const day of days) rcHistory[day] = day >= RC_SUBSCRIBER_START ? currentCount : 0
+      const snapshots = await snapshotRes.json()
+      for (const row of (Array.isArray(snapshots) ? snapshots : [])) {
+        if (rcHistory[row.date] !== undefined) rcHistory[row.date] = row.count
       }
     }
   } catch (e) { console.error('RC history error:', e.message) }
