@@ -165,6 +165,7 @@ export default function Home() {
           <a href="#contact" className="hover:text-[#1e3a5f] transition">Contact</a>
           <a href="https://practice.flight-levels.com" target="_blank" className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2 rounded-lg transition">ATC Trainer</a>
           <a href="https://checkride.flight-levels.com" target="_blank" className="bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2 rounded-lg transition">Checkride Prep</a>
+          <a href="https://flightreview.flight-levels.com" target="_blank" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">Flight Review Prep</a>
         </div>
         {/* Mobile menu button */}
         <button className="md:hidden text-gray-600 hover:text-[#1e3a5f]" onClick={() => setMobileMenuOpen(o => !o)}>
@@ -184,6 +185,7 @@ export default function Home() {
           <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#1e3a5f]">Contact</a>
           <a href="https://practice.flight-levels.com" target="_blank" className="text-[#1d4ed8]">ATC Trainer</a>
           <a href="https://checkride.flight-levels.com" target="_blank" className="text-[#0f766e]">Checkride Prep</a>
+          <a href="https://flightreview.flight-levels.com" target="_blank" className="text-green-600">Flight Review Prep</a>
         </div>
       )}
 
@@ -207,6 +209,9 @@ export default function Home() {
           </a>
           <a href="https://checkride.flight-levels.com/demo" target="_blank" className="border border-teal-400/50 hover:border-teal-400 text-teal-300 hover:text-teal-200 px-8 py-4 rounded-lg text-lg transition">
             Try Checkride Prep Free
+          </a>
+          <a href="https://flightreview.flight-levels.com/demo" target="_blank" className="border border-green-400/50 hover:border-green-400 text-green-300 hover:text-green-200 px-8 py-4 rounded-lg text-lg transition">
+            Try Flight Review Prep Free
           </a>
         </div>
       </section>
@@ -440,7 +445,7 @@ export default function Home() {
               <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">Online & AI Training Tools</span>
               <div className="h-px flex-1 bg-gray-200" />
             </div>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
               <div className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col">
                 <div className="text-4xl mb-4">👨‍✈️</div>
@@ -475,6 +480,19 @@ export default function Home() {
                 </p>
                 <div className="text-sm text-gray-400 mb-4">$29 / month · Cancel anytime</div>
                 <a href="https://practice.flight-levels.com" target="_blank" className="block text-center bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition">
+                  Try Free Demo
+                </a>
+              </div>
+
+              <div className="bg-white rounded-2xl p-7 shadow-sm border border-green-100 hover:shadow-md transition flex flex-col relative overflow-hidden">
+                <div className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">AI</div>
+                <div className="text-4xl mb-4">✈️</div>
+                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">Flight Review Prep</h3>
+                <p className="text-gray-500 text-sm mb-6 flex-1">
+                  Practice the ground portion of your biennial flight review with an AI CFI. Part 91 regulations, airspace, weather, emergency procedures, and more. Available 24/7 before your actual review.
+                </p>
+                <div className="text-sm text-gray-400 mb-4">$29 / month · Cancel anytime</div>
+                <a href="https://flightreview.flight-levels.com/demo" target="_blank" className="block text-center bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition">
                   Try Free Demo
                 </a>
               </div>
@@ -578,6 +596,7 @@ export default function Home() {
                 <option value="Flight Instruction">Flight Instruction (General)</option>
                 <option value="ATC Trainer">ATC Trainer App</option>
                 <option value="Checkride Prep">Checkride Prep AI</option>
+                <option value="Flight Review Prep">Flight Review Prep AI</option>
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -616,6 +635,7 @@ export default function Home() {
           <a href="https://www.youtube.com/@Flight-Levels" target="_blank" className="hover:text-gray-600 transition">YouTube</a>
           <a href="https://practice.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">ATC Trainer</a>
           <a href="https://checkride.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">Checkride Prep</a>
+          <a href="https://flightreview.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">Flight Review Prep</a>
           <a href="mailto:joe@flight-levels.com" className="hover:text-gray-600 transition">joe@flight-levels.com</a>
         </div>
       </footer>
