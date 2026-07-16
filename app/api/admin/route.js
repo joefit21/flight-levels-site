@@ -243,12 +243,22 @@ async function fetchSubscriberHistory() {
     // 3. Read all snapshots within our 42-day window
     if (sbUrl && sbKey) {
       const snapshotRes = await fetch(
-        `${sbUrl}/rest/v1/rc_subscriber_snapshots?date=gte.${days[0]}&date=lte.${today}&select=date,count`,
+        `${sbUrl}/rest/v1/rc_subscriber_snapshots?date=gte.${days[0]}&date=lte.${today}&select=date,count&order=date.asc`,
         { headers: { apikey: sbKey, Authorization: `Bearer ${sbKey}` } }
       )
       const snapshots = await snapshotRes.json()
       for (const row of (Array.isArray(snapshots) ? snapshots : [])) {
         if (rcHistory[row.date] !== undefined) rcHistory[row.date] = row.count
+      }
+
+      // Forward-fill missing days with last known value to eliminate false zeros
+      let lastKnown = 0
+      for (const day of days) {
+        if (rcHistory[day] > 0) {
+          lastKnown = rcHistory[day]
+        } else if (lastKnown > 0) {
+          rcHistory[day] = lastKnown
+        }
       }
     }
   } catch (e) { console.error('RC history error:', e.message) }
