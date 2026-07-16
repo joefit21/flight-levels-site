@@ -392,6 +392,28 @@ export default function AdminDashboard() {
                   placeholder={data?.anthropic?.estimatedCost != null ? data.anthropic.estimatedCost.toFixed(2) : '0.00'}
                 />
               </div>
+              {data?.anthropic?.breakdown?.length > 0 && (
+                <div className="mt-3 rounded-lg overflow-hidden border border-gray-100">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="bg-gray-50 text-gray-400">
+                        <th className="text-left px-3 py-1.5 font-semibold">Product</th>
+                        <th className="text-right px-3 py-1.5 font-semibold">Calls</th>
+                        <th className="text-right px-3 py-1.5 font-semibold">Est. Cost</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.anthropic.breakdown.map((row, i) => (
+                        <tr key={i} className="border-t border-gray-50">
+                          <td className="px-3 py-1.5 text-gray-600">{row.label}</td>
+                          <td className="px-3 py-1.5 text-right text-gray-400">{row.calls}</td>
+                          <td className="px-3 py-1.5 text-right text-red-400 font-medium">{fmt(row.cost)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* Extra expenses */}

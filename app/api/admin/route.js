@@ -114,21 +114,46 @@ async function fetchAnthropicUsage() {
     startOfMonth.setHours(0, 0, 0, 0)
 
     const res = await fetch(
-      `${url}/rest/v1/api_usage?created_at=gte.${startOfMonth.toISOString()}&select=input_tokens,output_tokens`,
+      `${url}/rest/v1/api_usage?created_at=gte.${startOfMonth.toISOString()}&select=input_tokens,output_tokens,cache_read_input_tokens,route`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } }
     )
     const rows = await res.json()
     if (!Array.isArray(rows)) return { error: 'Unexpected Supabase response' }
 
-    const totalInput  = rows.reduce((s, r) => s + (r.input_tokens  || 0), 0)
-    const totalOutput = rows.reduce((s, r) => s + (r.output_tokens || 0), 0)
+    const calcCost = (input, output, cacheRead) =>
+      ((input * 3) + (output * 15) + (cacheRead * 0.30)) / 1_000_000
 
-    // claude-sonnet-4-6: $3/MTok input · $15/MTok output
-    const estimatedCost = Math.round(
-      ((totalInput * 3) + (totalOutput * 15)) / 1_000_000 * 100
-    ) / 100
+    const totalInput     = rows.reduce((s, r) => s + (r.input_tokens  || 0), 0)
+    const totalOutput    = rows.reduce((s, r) => s + (r.output_tokens || 0), 0)
+    const totalCacheRead = rows.reduce((s, r) => s + (r.cache_read_input_tokens || 0), 0)
+    const estimatedCost  = Math.round(calcCost(totalInput, totalOutput, totalCacheRead) * 100) / 100
 
-    return { totalCalls: rows.length, totalInputTokens: totalInput, totalOutputTokens: totalOutput, estimatedCost }
+    // Per-product breakdown
+    const ROUTE_LABELS = {
+      'exam':           'Checkride Prep',
+      'exam/demo':      'Checkride Prep (demo)',
+      'scenario/ground':'ATC Trainer (ground)',
+      'scenario/ifr':   'ATC Trainer (IFR)',
+      'review':         'Flight Review Prep',
+      'review/demo':    'Flight Review Prep (demo)',
+    }
+    const byRoute = {}
+    for (const r of rows) {
+      const route = r.route || 'unknown'
+      if (!byRoute[route]) byRoute[route] = { calls: 0, input: 0, output: 0, cacheRead: 0 }
+      byRoute[route].calls++
+      byRoute[route].input     += r.input_tokens || 0
+      byRoute[route].output    += r.output_tokens || 0
+      byRoute[route].cacheRead += r.cache_read_input_tokens || 0
+    }
+    const breakdown = Object.entries(byRoute).map(([route, d]) => ({
+      route,
+      label: ROUTE_LABELS[route] || route,
+      calls: d.calls,
+      cost:  Math.round(calcCost(d.input, d.output, d.cacheRead) * 100) / 100,
+    })).sort((a, b) => b.cost - a.cost)
+
+    return { totalCalls: rows.length, totalInputTokens: totalInput, totalOutputTokens: totalOutput, estimatedCost, breakdown }
   } catch (err) {
     return { error: err.message }
   }
