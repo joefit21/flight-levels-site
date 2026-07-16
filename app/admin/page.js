@@ -463,18 +463,26 @@ export default function AdminDashboard() {
         {/* Monthly revenue history */}
         {stripe.monthlyRevenue && Object.keys(stripe.monthlyRevenue).length > 0 && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4">📈 Stripe Revenue History</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-1">📈 Revenue History</h2>
+            <p className="text-xs text-gray-400 mb-4">Web (Stripe) + App Store — net after all platform fees</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
               {Object.entries(stripe.monthlyRevenue)
                 .sort((a, b) => b[0].localeCompare(a[0]))
                 .slice(0, 6)
-                .map(([month, gross]) => (
-                  <div key={month} className="bg-gray-50 rounded-xl p-3 text-center">
-                    <div className="text-xs text-gray-400 mb-1">{new Date(month + '-01').toLocaleString('en-US', { month: 'short', year: '2-digit' })}</div>
-                    <div className="text-base font-bold text-blue-600">{fmtInt(gross)}</div>
-                    <div className="text-xs text-gray-300">gross</div>
-                  </div>
-                ))}
+                .map(([month, gross]) => {
+                  const stripeNet = gross * (1 - 0.029) - (gross > 0 ? 0.30 : 0)
+                  const isCurrentMonth = month === currentMonthKey
+                  return (
+                    <div key={month} className={`rounded-xl p-3 text-center ${isCurrentMonth ? 'bg-blue-50 border border-blue-100' : 'bg-gray-50'}`}>
+                      <div className="text-xs text-gray-400 mb-1">
+                        {new Date(month + '-01').toLocaleString('en-US', { month: 'short', year: '2-digit' })}
+                        {isCurrentMonth && <span className="ml-1 text-blue-400">·now</span>}
+                      </div>
+                      <div className="text-base font-bold text-green-600">{fmtInt(stripeNet + appleNet)}</div>
+                      <div className="text-xs text-gray-300">web + app</div>
+                    </div>
+                  )
+                })}
             </div>
           </div>
         )}

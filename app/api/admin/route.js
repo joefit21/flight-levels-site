@@ -40,10 +40,18 @@ async function fetchStripe() {
     )
     const subs = await subsRes.json()
 
-    // Recent charges (last 60 days)
-    const since = Math.floor(Date.now() / 1000) - 60 * 24 * 60 * 60
+    // Paid invoices (last 6 months) — captures subscription renewals correctly
+    const since6mo = Math.floor(Date.now() / 1000) - 180 * 24 * 60 * 60
+    const invoicesRes = await fetch(
+      `https://api.stripe.com/v1/invoices?status=paid&limit=100&created[gte]=${since6mo}`,
+      { headers }
+    )
+    const invoices = await invoicesRes.json()
+
+    // Recent charges (last 60 days) — kept for the "recent charges" list display
+    const since60 = Math.floor(Date.now() / 1000) - 60 * 24 * 60 * 60
     const chargesRes = await fetch(
-      `https://api.stripe.com/v1/charges?limit=100&created[gte]=${since}`,
+      `https://api.stripe.com/v1/charges?limit=100&created[gte]=${since60}`,
       { headers }
     )
     const charges = await chargesRes.json()
@@ -55,13 +63,12 @@ async function fetchStripe() {
     )
     const payouts = await payoutsRes.json()
 
-    // Summarise charges by month
+    // Summarise invoices by month (gross Stripe revenue)
     const monthlyRevenue = {}
-    for (const charge of charges.data || []) {
-      if (charge.status !== 'succeeded') continue
-      const d = new Date(charge.created * 1000)
+    for (const inv of invoices.data || []) {
+      const d = new Date(inv.created * 1000)
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-      monthlyRevenue[key] = (monthlyRevenue[key] || 0) + charge.amount / 100
+      monthlyRevenue[key] = (monthlyRevenue[key] || 0) + inv.amount_paid / 100
     }
 
     // Product breakdown from active subscriptions
