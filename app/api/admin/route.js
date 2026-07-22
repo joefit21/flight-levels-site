@@ -113,7 +113,7 @@ async function fetchStripe() {
 async function fetchAnthropicUsage() {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) return { error: 'No Supabase credentials configured' }
+  if (!url || !key) return { error: `No Supabase credentials configured (url=${!!url}, key=${!!key})` }
 
   try {
     const startOfMonth = new Date()
@@ -125,7 +125,7 @@ async function fetchAnthropicUsage() {
       { headers: { apikey: key, Authorization: `Bearer ${key}` } }
     )
     const rows = await res.json()
-    if (!Array.isArray(rows)) return { error: 'Unexpected Supabase response' }
+    if (!Array.isArray(rows)) return { error: `Unexpected Supabase response: ${JSON.stringify(rows).slice(0, 200)}` }
 
     const calcCost = (input, output, cacheRead) =>
       ((input * 3) + (output * 15) + (cacheRead * 0.30)) / 1_000_000
