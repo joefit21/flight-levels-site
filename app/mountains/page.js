@@ -92,14 +92,9 @@ export default function MountainsIndexPage() {
         <h1 className="text-4xl md:text-5xl font-bold max-w-2xl mx-auto leading-tight mb-6">
           Mountain Flying Guides
         </h1>
-        <p className="text-blue-100 text-lg max-w-2xl mx-auto mb-10">
+        <p className="text-blue-100 text-lg max-w-2xl mx-auto">
           Local knowledge for flying into Colorado&rsquo;s mountain airports: which passes to use, which weather cameras and AWOS actually matter, and when the answer is &ldquo;not today.&rdquo;
         </p>
-        <div className="max-w-md mx-auto bg-white rounded-2xl p-6 shadow-lg text-left">
-          <p className="text-gray-900 font-semibold mb-1">Get notified as new airports go up</p>
-          <p className="text-gray-500 text-sm mb-4">One email per new guide. No spam.</p>
-          <MountainSignupForm />
-        </div>
       </section>
 
       <section className="px-8 py-20 max-w-5xl mx-auto">
@@ -132,6 +127,14 @@ export default function MountainsIndexPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="px-8 py-16">
+        <div className="max-w-md mx-auto bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-left">
+          <p className="text-gray-900 font-semibold mb-1">Get notified as new airports go up</p>
+          <p className="text-gray-500 text-sm mb-4">One email per new guide. No spam.</p>
+          <MountainSignupForm />
         </div>
       </section>
 
