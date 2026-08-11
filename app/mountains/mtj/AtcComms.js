@@ -1,6 +1,7 @@
 'use client'
 import { useRoute } from './RouteContext'
 import RouteMap from './RouteMap'
+import AtcTrainerCta from '../../components/AtcTrainerCta'
 
 const COMMS = {
   south: [
@@ -116,7 +117,7 @@ function CommsStrip({ route }) {
   )
 }
 
-export default function AtcComms() {
+export default function AtcComms({ guide }) {
   const { route } = useRoute()
   const zones = COMMS[route]
 
@@ -148,6 +149,7 @@ export default function AtcComms() {
           </div>
         ))}
       </div>
+      <AtcTrainerCta guide={guide} />
     </div>
   )
 }

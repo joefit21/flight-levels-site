@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { trackEvent } from '../lib/analytics'
 
 const LINKS = [
   { href: '/#about', label: 'About' },
@@ -10,6 +11,16 @@ const LINKS = [
   { href: '/#youtube', label: 'YouTube' },
   { href: '/#contact', label: 'Contact' },
 ]
+
+const PRODUCTS = [
+  { href: 'https://practice.flight-levels.com', label: 'ATC Trainer', id: 'atc_trainer', desktopClass: 'bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2 rounded-lg transition', mobileClass: 'text-[#1d4ed8]' },
+  { href: 'https://checkride.flight-levels.com', label: 'Checkride Prep', id: 'checkride_prep', desktopClass: 'bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2 rounded-lg transition', mobileClass: 'text-[#0f766e]' },
+  { href: 'https://flightreview.flight-levels.com', label: 'Flight Review Prep', id: 'flight_review_prep', desktopClass: 'bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition', mobileClass: 'text-green-600' },
+]
+
+function trackProductClick(productId) {
+  trackEvent('product_link_click', { product: productId, link_location: 'nav' })
+}
 
 export default function Nav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -27,9 +38,11 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
-          <a href="https://practice.flight-levels.com" target="_blank" rel="noopener noreferrer" className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2 rounded-lg transition">ATC Trainer</a>
-          <a href="https://checkride.flight-levels.com" target="_blank" rel="noopener noreferrer" className="bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2 rounded-lg transition">Checkride Prep</a>
-          <a href="https://flightreview.flight-levels.com" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">Flight Review Prep</a>
+          {PRODUCTS.map((p) => (
+            <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer" onClick={() => trackProductClick(p.id)} className={p.desktopClass}>
+              {p.label}
+            </a>
+          ))}
         </div>
         <button className="md:hidden text-gray-600 hover:text-[#1e3a5f]" onClick={() => setMobileMenuOpen((o) => !o)} aria-label="Toggle menu">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,9 +58,11 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
-          <a href="https://practice.flight-levels.com" target="_blank" rel="noopener noreferrer" className="text-[#1d4ed8]">ATC Trainer</a>
-          <a href="https://checkride.flight-levels.com" target="_blank" rel="noopener noreferrer" className="text-[#0f766e]">Checkride Prep</a>
-          <a href="https://flightreview.flight-levels.com" target="_blank" rel="noopener noreferrer" className="text-green-600">Flight Review Prep</a>
+          {PRODUCTS.map((p) => (
+            <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer" onClick={() => trackProductClick(p.id)} className={p.mobileClass}>
+              {p.label}
+            </a>
+          ))}
         </div>
       )}
     </>

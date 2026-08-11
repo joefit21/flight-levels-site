@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { trackEvent } from '../lib/analytics'
 
 export default function MountainSignupForm() {
   const [email, setEmail] = useState('')
@@ -17,6 +18,7 @@ export default function MountainSignupForm() {
       if (res.ok) {
         setStatus('success')
         setEmail('')
+        trackEvent('mountains_signup')
       } else {
         setStatus('error')
       }
