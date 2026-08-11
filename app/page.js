@@ -1,10 +1,12 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
+import Nav from './components/Nav'
+import Footer from './components/Footer'
 
 export default function Home() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
   const [formStatus, setFormStatus] = useState(null)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -151,43 +153,7 @@ export default function Home() {
     <main className="min-h-screen bg-white text-gray-900">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Nav */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur z-50">
-        <div>
-          <div className="text-xl font-bold text-[#1e3a5f]">Flight Levels</div>
-          <div className="text-xs text-gray-500 tracking-wide">Joe Mattison · KLMO</div>
-        </div>
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <a href="#about" className="hover:text-[#1e3a5f] transition">About</a>
-          <a href="#colorado" className="hover:text-[#1e3a5f] transition">Colorado Flying</a>
-          <a href="#services" className="hover:text-[#1e3a5f] transition">Services</a>
-          <a href="#youtube" className="hover:text-[#1e3a5f] transition">YouTube</a>
-          <a href="#contact" className="hover:text-[#1e3a5f] transition">Contact</a>
-          <a href="https://practice.flight-levels.com" target="_blank" className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2 rounded-lg transition">ATC Trainer</a>
-          <a href="https://checkride.flight-levels.com" target="_blank" className="bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2 rounded-lg transition">Checkride Prep</a>
-          <a href="https://flightreview.flight-levels.com" target="_blank" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">Flight Review Prep</a>
-        </div>
-        {/* Mobile menu button */}
-        <button className="md:hidden text-gray-600 hover:text-[#1e3a5f]" onClick={() => setMobileMenuOpen(o => !o)}>
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={mobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} />
-          </svg>
-        </button>
-      </nav>
-
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-100 px-8 py-4 flex flex-col gap-4 text-sm font-medium text-gray-600 z-40">
-          <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#1e3a5f]">About</a>
-          <a href="#colorado" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#1e3a5f]">Colorado Flying</a>
-          <a href="#services" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#1e3a5f]">Services</a>
-          <a href="#youtube" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#1e3a5f]">YouTube</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-[#1e3a5f]">Contact</a>
-          <a href="https://practice.flight-levels.com" target="_blank" className="text-[#1d4ed8]">ATC Trainer</a>
-          <a href="https://checkride.flight-levels.com" target="_blank" className="text-[#0f766e]">Checkride Prep</a>
-          <a href="https://flightreview.flight-levels.com" target="_blank" className="text-green-600">Flight Review Prep</a>
-        </div>
-      )}
+      <Nav />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#0f2044] to-[#1d4ed8] text-white px-8 py-28 text-center">
@@ -365,9 +331,14 @@ export default function Home() {
               <h3 className="text-xl font-bold text-white mb-2">Flying into Colorado this season?</h3>
               <p className="text-blue-200">Let's connect before your trip. A one-hour conversation with someone who knows this airspace from both sides of the radio is worth more than any YouTube briefing.</p>
             </div>
-            <a href="#contact" className="bg-white text-[#1e3a5f] hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold transition whitespace-nowrap">
-              Get in Touch
-            </a>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              <Link href="/mountains" className="border border-white/40 hover:border-white text-white px-8 py-4 rounded-lg font-semibold transition whitespace-nowrap text-center">
+                Free Mountain Guides
+              </Link>
+              <a href="#contact" className="bg-white text-[#1e3a5f] hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold transition whitespace-nowrap text-center">
+                Get in Touch
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -628,17 +599,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="px-8 py-8 border-t border-gray-100 text-center text-gray-400 text-sm">
-        <p>© 2026 Flight Levels · Joe Mattison · KLMO, Longmont CO · All views expressed are my own.</p>
-        <div className="flex justify-center gap-6 mt-3 flex-wrap">
-          <a href="https://www.youtube.com/@Flight-Levels" target="_blank" className="hover:text-gray-600 transition">YouTube</a>
-          <a href="https://practice.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">ATC Trainer</a>
-          <a href="https://checkride.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">Checkride Prep</a>
-          <a href="https://flightreview.flight-levels.com" target="_blank" className="hover:text-gray-600 transition">Flight Review Prep</a>
-          <a href="mailto:joe@flight-levels.com" className="hover:text-gray-600 transition">joe@flight-levels.com</a>
-        </div>
-      </footer>
+      <Footer />
 
     </main>
   )
