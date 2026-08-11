@@ -22,8 +22,6 @@ export const metadata = {
   },
 }
 
-const TEASER = ['Video']
-
 export default function MtjPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -107,18 +105,6 @@ export default function MtjPage() {
             <AtcComms />
           </div>
         </RouteProvider>
-
-        <div className="border-t border-gray-100 pt-8 mb-14">
-          <span className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-4 block">Coming Up in This Guide</span>
-          <ol className="divide-y divide-gray-100">
-            {TEASER.map((t, i) => (
-              <li key={t} className="flex gap-4 py-3 text-sm text-gray-500">
-                <span className="font-mono text-gray-400">{String(i + 6).padStart(2, '0')}</span>
-                {t}
-              </li>
-            ))}
-          </ol>
-        </div>
 
         <div className="bg-blue-50 border border-blue-100 rounded-2xl px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
