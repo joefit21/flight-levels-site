@@ -164,7 +164,7 @@ export default function Home() {
           Both Sides of <span className="text-blue-300">the Radio</span>
         </h1>
         <p className="text-blue-100 text-xl max-w-2xl mx-auto mb-10">
-          21 years as a flight instructor. A former air traffic controller at Denver ARTCC, now working in ATC automation. If you're flying in Colorado or planning to, there's no substitute for someone who knows this airspace from both seats.
+          21 years as a flight instructor. A former air traffic controller at Denver ARTCC, now working in ATC automation. Everything on this site comes from having sat in both seats.
         </p>
         <p className="text-blue-300 text-sm font-semibold uppercase tracking-wide mb-6">What brings you here?</p>
         <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto text-left">
