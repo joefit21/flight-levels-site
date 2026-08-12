@@ -5,18 +5,21 @@ import { trackEvent } from '../lib/analytics'
 
 const LINKS = [
   { href: '/#about', label: 'About' },
-  { href: '/#colorado', label: 'Colorado Flying' },
-  { href: '/mountains', label: 'Mountain Guides' },
+  { href: '/#guides', label: 'Guides' },
   { href: '/#services', label: 'Services' },
-  { href: '/#youtube', label: 'YouTube' },
   { href: '/#contact', label: 'Contact' },
 ]
 
+// One shared treatment rather than three competing brand colors. The per-product
+// colors still do useful work on the Services cards, where they sit in context.
 const PRODUCTS = [
-  { href: 'https://practice.flight-levels.com', label: 'ATC Trainer', id: 'atc_trainer', desktopClass: 'bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2 rounded-lg transition', mobileClass: 'text-[#1d4ed8]' },
-  { href: 'https://checkride.flight-levels.com', label: 'Checkride Prep', id: 'checkride_prep', desktopClass: 'bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2 rounded-lg transition', mobileClass: 'text-[#0f766e]' },
-  { href: 'https://flightreview.flight-levels.com', label: 'Flight Review Prep', id: 'flight_review_prep', desktopClass: 'bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition', mobileClass: 'text-green-600' },
+  { href: 'https://practice.flight-levels.com', label: 'ATC Trainer', id: 'atc_trainer' },
+  { href: 'https://checkride.flight-levels.com', label: 'Checkride Prep', id: 'checkride_prep' },
+  { href: 'https://flightreview.flight-levels.com', label: 'Flight Review Prep', id: 'flight_review_prep' },
 ]
+
+const PRODUCT_DESKTOP_CLASS =
+  'border border-gray-200 text-gray-700 hover:border-[#1d4ed8] hover:text-[#1d4ed8] px-4 py-2 rounded-lg transition'
 
 function trackProductClick(productId) {
   trackEvent('product_link_click', { product: productId, link_location: 'nav' })
@@ -39,7 +42,7 @@ export default function Nav() {
             </Link>
           ))}
           {PRODUCTS.map((p) => (
-            <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer" onClick={() => trackProductClick(p.id)} className={p.desktopClass}>
+            <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer" onClick={() => trackProductClick(p.id)} className={PRODUCT_DESKTOP_CLASS}>
               {p.label}
             </a>
           ))}
@@ -58,11 +61,20 @@ export default function Nav() {
               {l.label}
             </Link>
           ))}
-          {PRODUCTS.map((p) => (
-            <a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer" onClick={() => trackProductClick(p.id)} className={p.mobileClass}>
-              {p.label}
-            </a>
-          ))}
+          <div className="border-t border-gray-100 pt-4 flex flex-col gap-4">
+            {PRODUCTS.map((p) => (
+              <a
+                key={p.href}
+                href={p.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackProductClick(p.id)}
+                className="text-[#1d4ed8] hover:text-[#1e40af]"
+              >
+                {p.label}
+              </a>
+            ))}
+          </div>
         </div>
       )}
     </>

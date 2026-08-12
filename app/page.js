@@ -166,18 +166,29 @@ export default function Home() {
         <p className="text-blue-100 text-xl max-w-2xl mx-auto mb-10">
           21 years as a flight instructor. A former air traffic controller at Denver ARTCC, now working in ATC automation. If you're flying in Colorado or planning to, there's no substitute for someone who knows this airspace from both seats.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
-          <a href="#colorado" className="bg-white text-[#1e3a5f] hover:bg-blue-50 px-8 py-4 rounded-lg text-lg font-semibold transition">
-            Flying in Colorado?
+        <p className="text-blue-300 text-sm font-semibold uppercase tracking-wide mb-6">What brings you here?</p>
+        <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto text-left">
+          <a
+            href="#colorado"
+            className="group bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/50 rounded-2xl p-6 transition flex flex-col"
+          >
+            <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Flying into Colorado</div>
+            <div className="text-xl font-bold text-white mb-2">Mountain guides, instruction, and briefings</div>
+            <p className="text-blue-100 text-sm leading-relaxed mb-4 flex-1">
+              Free route guides for the mountain airports, plus instruction and pre-trip briefings from someone who worked this airspace from the other side.
+            </p>
+            <span className="text-white font-semibold text-sm group-hover:underline">Start here &rarr;</span>
           </a>
-          <a href="#services" className="border border-white/30 hover:border-white/60 text-white px-8 py-4 rounded-lg text-lg transition">
-            See All Services
-          </a>
-          <a href="https://checkride.flight-levels.com/demo" target="_blank" className="border border-teal-400/50 hover:border-teal-400 text-teal-300 hover:text-teal-200 px-8 py-4 rounded-lg text-lg transition">
-            Try Checkride Prep Free
-          </a>
-          <a href="https://flightreview.flight-levels.com/demo" target="_blank" className="border border-green-400/50 hover:border-green-400 text-green-300 hover:text-green-200 px-8 py-4 rounded-lg text-lg transition">
-            Try Flight Review Prep Free
+          <a
+            href="#services"
+            className="group bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/50 rounded-2xl p-6 transition flex flex-col"
+          >
+            <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Training for a checkride or review</div>
+            <div className="text-xl font-bold text-white mb-2">AI practice tools, wherever you fly</div>
+            <p className="text-blue-100 text-sm leading-relaxed mb-4 flex-1">
+              Mock orals, IFR clearance readbacks, and flight review prep. On demand, from anywhere, no Colorado required.
+            </p>
+            <span className="text-white font-semibold text-sm group-hover:underline">See the tools &rarr;</span>
           </a>
         </div>
       </section>
@@ -331,15 +342,48 @@ export default function Home() {
               <h3 className="text-xl font-bold text-white mb-2">Flying into Colorado this season?</h3>
               <p className="text-blue-200">Let's connect before your trip. A one-hour conversation with someone who knows this airspace from both sides of the radio is worth more than any YouTube briefing.</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-              <Link href="/mountains" className="border border-white/40 hover:border-white text-white px-8 py-4 rounded-lg font-semibold transition whitespace-nowrap text-center">
-                Free Mountain Guides
-              </Link>
-              <a href="#contact" className="bg-white text-[#1e3a5f] hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold transition whitespace-nowrap text-center">
-                Get in Touch
-              </a>
-            </div>
+            <a href="#contact" className="bg-white text-[#1e3a5f] hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold transition whitespace-nowrap text-center flex-shrink-0">
+              Get in Touch
+            </a>
           </div>
+        </div>
+      </section>
+
+      {/* Free Guides */}
+      <section id="guides" className="px-8 py-24 max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-[#1e3a5f] mb-4">Free Colorado Flying Guides</h2>
+          <p className="text-gray-500 max-w-2xl mx-auto">
+            Local knowledge for the mountain airports, free and staying that way. Two libraries, split by how you fly.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Link
+            href="/mountains"
+            className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition flex flex-col"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#1d4ed8] mb-3">VFR &middot; Piston</span>
+            <h3 className="text-xl font-bold text-[#1e3a5f] mb-3">Mountain Flying Guides</h3>
+            <p className="text-gray-500 text-sm leading-relaxed flex-1">
+              Route guides for Colorado&rsquo;s mountain airports: which passes to use, which weather cameras and AWOS
+              actually matter, where the precautionary stops are, and when the answer is &ldquo;not today.&rdquo;
+            </p>
+            <span className="text-[#1d4ed8] text-sm font-semibold mt-5">Browse the guides &rarr;</span>
+          </Link>
+          <Link
+            href="/highcountry"
+            className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md hover:border-blue-200 transition flex flex-col"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-[#1d4ed8] mb-3">
+              IFR &middot; Turbine &amp; High Performance
+            </span>
+            <h3 className="text-xl font-bold text-[#1e3a5f] mb-3">High Country IFR</h3>
+            <p className="text-gray-500 text-sm leading-relaxed flex-1">
+              What ATC is actually going to assign you into and out of the mountain airports based on your direction of
+              flight, why the arrivals are built the way they are, and how to get a clearance on the ground.
+            </p>
+            <span className="text-[#1d4ed8] text-sm font-semibold mt-5">Browse the guides &rarr;</span>
+          </Link>
         </div>
       </section>
 
