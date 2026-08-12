@@ -61,7 +61,7 @@ export default function PassesInDetail() {
   return (
     <div>
       <p className="text-xs text-gray-400 mb-4">
-        Showing the {route === 'south' ? 'South · Primary' : 'North · Alternate'} route.
+        Showing the {route === 'north' ? 'North · Primary' : 'South · Alternate'} route.
       </p>
       <div className="divide-y divide-gray-100">
         {passes.map((p) => (

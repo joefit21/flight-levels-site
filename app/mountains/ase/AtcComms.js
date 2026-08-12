@@ -124,7 +124,7 @@ export default function AtcComms({ guide }) {
   return (
     <div>
       <p className="text-xs text-gray-400 mb-4">
-        Showing the {route === 'south' ? 'South · Primary' : 'North · Alternate'} route. Same pass positions as the
+        Showing the {route === 'north' ? 'North · Primary' : 'South · Alternate'} route. Same pass positions as the
         map below, so you can line up exactly where each frequency change happens.
       </p>
       <RouteMap route={route} />

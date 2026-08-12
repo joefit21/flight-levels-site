@@ -4,32 +4,8 @@ import { useRoute } from './RouteContext'
 import RouteMap from './RouteMap'
 
 const DATA = {
-  south: {
-    label: 'South · Primary',
-    track: ['Front Range', "Kenosha Pass 10,001'", "Trout Creek Pass 9,346'", 'Buena Vista', "Monarch Pass 11,312'", 'Gunnison', 'Montrose (overfly)', 'Carbondale (VPAKG)', 'Aspen'],
-    cams: [
-      { label: 'Bald Mtn cam', href: 'https://weathercams.faa.gov/map/-106.68323,38.43831,-104.82655,39.15859/cameraSite/50/details/camera' },
-      { label: 'Monarch cam', href: 'https://weathercams.faa.gov/map/-106.55226,38.31631,-105.62392,38.67798/cameraSite/77/details/camera' },
-      { label: 'Gunnison cam', href: 'https://weathercams.faa.gov/map/-107.39718,38.17513,-105.5405,38.89806/cameraSite/540/details/camera' },
-      { label: 'Aspen cam', href: 'https://weathercams.faa.gov/map/-108.1898,38.32471,-102.90262,40.10777/airport/ASE/details/weather' },
-    ],
-    awos: [
-      { label: 'Bald Mtn AWOS', metar: 'K7BM', href: 'https://aviationweather.gov/data/metar/?ids=K7BM&hours=3' },
-      { label: 'Monarch AWOS', metar: 'KMYP', href: 'https://aviationweather.gov/data/metar/?ids=KMYP&hours=3' },
-      { label: 'Gunnison AWOS', metar: 'KGUC', href: 'https://aviationweather.gov/data/metar/?ids=KGUC&hours=3' },
-      { label: 'Montrose AWOS', metar: 'KMTJ', href: 'https://aviationweather.gov/data/metar/?ids=KMTJ&hours=3' },
-      { label: 'Sunlight Mtn AWOS', metar: 'K5SM', href: 'https://aviationweather.gov/data/metar/?ids=K5SM&hours=3' },
-      { label: 'Aspen AWOS', metar: 'KASE', href: 'https://aviationweather.gov/data/metar/?ids=KASE&hours=3' },
-    ],
-    bailouts: [
-      { label: 'AEJ', metar: 'KAEJ', href: 'https://aviationweather.gov/data/metar/?ids=KAEJ&hours=3' },
-      { label: 'ANK', metar: 'KANK', href: 'https://aviationweather.gov/data/metar/?ids=KANK&hours=3' },
-      { label: 'GUC', metar: 'KGUC', href: 'https://aviationweather.gov/data/metar/?ids=KGUC&hours=3' },
-      { label: 'MTJ', metar: 'KMTJ', href: 'https://aviationweather.gov/data/metar/?ids=KMTJ&hours=3' },
-    ],
-  },
   north: {
-    label: 'North · Alternate',
+    label: 'North · Primary',
     track: ['Front Range', "Rollins 11,676' (or Berthoud 11,315')", 'Kremmling', 'Eagle County (overfly)', "Cottonwood 8,280' (Gypsum)", 'Carbondale (VPAKG)', 'Aspen'],
     cams: [
       { label: 'Dakota Hill cam', href: 'https://weathercams.faa.gov/map/-106.01767,39.51337,-104.16099,40.22272/cameraSite/66/details/camera' },
@@ -52,6 +28,30 @@ const DATA = {
       { label: 'GNB', metar: 'KGNB', href: 'https://aviationweather.gov/data/metar/?ids=KGNB&hours=3' },
       { label: '20V', metar: 'K20V', href: 'https://aviationweather.gov/data/metar/?ids=K20V&hours=3' },
       { label: 'EGE', metar: 'KEGE', href: 'https://aviationweather.gov/data/metar/?ids=KEGE&hours=3' },
+    ],
+  },
+  south: {
+    label: 'South · Alternate',
+    track: ['Front Range', "Kenosha Pass 10,001'", "Trout Creek Pass 9,346'", 'Buena Vista', "Monarch Pass 11,312'", 'Gunnison', 'Montrose (overfly)', 'Carbondale (VPAKG)', 'Aspen'],
+    cams: [
+      { label: 'Bald Mtn cam', href: 'https://weathercams.faa.gov/map/-106.68323,38.43831,-104.82655,39.15859/cameraSite/50/details/camera' },
+      { label: 'Monarch cam', href: 'https://weathercams.faa.gov/map/-106.55226,38.31631,-105.62392,38.67798/cameraSite/77/details/camera' },
+      { label: 'Gunnison cam', href: 'https://weathercams.faa.gov/map/-107.39718,38.17513,-105.5405,38.89806/cameraSite/540/details/camera' },
+      { label: 'Aspen cam', href: 'https://weathercams.faa.gov/map/-108.1898,38.32471,-102.90262,40.10777/airport/ASE/details/weather' },
+    ],
+    awos: [
+      { label: 'Bald Mtn AWOS', metar: 'K7BM', href: 'https://aviationweather.gov/data/metar/?ids=K7BM&hours=3' },
+      { label: 'Monarch AWOS', metar: 'KMYP', href: 'https://aviationweather.gov/data/metar/?ids=KMYP&hours=3' },
+      { label: 'Gunnison AWOS', metar: 'KGUC', href: 'https://aviationweather.gov/data/metar/?ids=KGUC&hours=3' },
+      { label: 'Montrose AWOS', metar: 'KMTJ', href: 'https://aviationweather.gov/data/metar/?ids=KMTJ&hours=3' },
+      { label: 'Sunlight Mtn AWOS', metar: 'K5SM', href: 'https://aviationweather.gov/data/metar/?ids=K5SM&hours=3' },
+      { label: 'Aspen AWOS', metar: 'KASE', href: 'https://aviationweather.gov/data/metar/?ids=KASE&hours=3' },
+    ],
+    bailouts: [
+      { label: 'AEJ', metar: 'KAEJ', href: 'https://aviationweather.gov/data/metar/?ids=KAEJ&hours=3' },
+      { label: 'ANK', metar: 'KANK', href: 'https://aviationweather.gov/data/metar/?ids=KANK&hours=3' },
+      { label: 'GUC', metar: 'KGUC', href: 'https://aviationweather.gov/data/metar/?ids=KGUC&hours=3' },
+      { label: 'MTJ', metar: 'KMTJ', href: 'https://aviationweather.gov/data/metar/?ids=KMTJ&hours=3' },
     ],
   },
 }

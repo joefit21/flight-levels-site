@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from 'react'
 const RouteContext = createContext(null)
 
 export function RouteProvider({ children }) {
-  const [route, setRoute] = useState('south')
+  const [route, setRoute] = useState('north')
   return <RouteContext.Provider value={{ route, setRoute }}>{children}</RouteContext.Provider>
 }
 
