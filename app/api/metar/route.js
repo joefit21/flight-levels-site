@@ -22,7 +22,7 @@ export async function GET(request) {
     text.split('\n').forEach((line) => {
       const trimmed = line.trim()
       if (!trimmed || trimmed.startsWith('#')) return
-      // Lines look like: "METAR KANK 062035Z AUTO ... $" — station ID is the 2nd token.
+      // Lines look like: "METAR KANK 062035Z AUTO ... $", so the station ID is the 2nd token.
       const stationId = trimmed.split(' ')[1]
       if (stationId) metars[stationId] = trimmed
     })

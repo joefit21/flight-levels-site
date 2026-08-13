@@ -1,4 +1,4 @@
-// Private admin dashboard API — never exposed to the public
+// Private admin dashboard API, never exposed to the public
 // All data is fetched server-side; keys never reach the browser
 
 export async function GET(req) {
@@ -40,7 +40,7 @@ async function fetchStripe() {
     )
     const subs = await subsRes.json()
 
-    // Paid invoices (last 6 months) — captures subscription renewals correctly
+    // Paid invoices (last 6 months), captures subscription renewals correctly
     const since6mo = Math.floor(Date.now() / 1000) - 180 * 24 * 60 * 60
     const invoicesRes = await fetch(
       `https://api.stripe.com/v1/invoices?status=paid&limit=100&created[gte]=${since6mo}`,
@@ -48,7 +48,7 @@ async function fetchStripe() {
     )
     const invoices = await invoicesRes.json()
 
-    // Recent charges (last 60 days) — kept for the "recent charges" list display
+    // Recent charges (last 60 days), kept for the "recent charges" list display
     const since60 = Math.floor(Date.now() / 1000) - 60 * 24 * 60 * 60
     const chargesRes = await fetch(
       `https://api.stripe.com/v1/charges?limit=100&created[gte]=${since60}`,
@@ -191,7 +191,7 @@ async function fetchSubscriberHistory() {
 
     const isActive = (s, dayStart, dayEnd) => {
       if (s.created >= dayEnd) return false
-      if (s.cancel_at_period_end || s.cancel_at) return false  // scheduled to cancel — don't count
+      if (s.cancel_at_period_end || s.cancel_at) return false  // scheduled to cancel, don't count
       if (['active', 'past_due', 'trialing'].includes(s.status)) return true
       if (s.status === 'canceled') return s.canceled_at && s.canceled_at > dayStart
       return false
@@ -284,7 +284,7 @@ async function fetchSubscriberHistory() {
 // ── RevenueCat ────────────────────────────────────────────────────
 async function fetchRevenueCat() {
   const key = process.env.REVENUECAT_API_KEY
-  if (!key) return { error: 'No RevenueCat secret key configured — see dashboard notes' }
+  if (!key) return { error: 'No RevenueCat secret key configured. See dashboard notes.' }
 
   try {
     const headers = {

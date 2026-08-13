@@ -7,7 +7,7 @@ const FIXED_EXPENSES = [
   { name: 'Vercel',                  amount: 20,    note: 'Pro tier' },
   { name: 'Supabase',                amount: 0,     note: 'Free tier' },
   { name: 'RevenueCat',              amount: 0,     note: 'Free under $2,500 MRR' },
-  { name: 'Domain Registration',     amount: 0,     note: 'Annual — enter monthly equiv.' },
+  { name: 'Domain Registration',     amount: 0,     note: 'Annual, enter monthly equiv.' },
 ]
 
 // Net rates after platform fees
@@ -15,7 +15,7 @@ const APPLE_NET_RATE  = 0.85 * 0.99  // Apple 15% + RevCat 1%
 const STRIPE_NET_RATE = rate => rate * 0.971 - 0.30  // Stripe 2.9% + $0.30
 
 function fmt(n) {
-  if (n === undefined || n === null) return '—'
+  if (n === undefined || n === null) return 'n/a'
   return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 function fmtInt(n) {
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
   // ── Calculations ──────────────────────────────────────────────
   const stripe = data?.stripe || {}
 
-  // Apple/RevCat income — auto from RevenueCat MRR if available, else manual
+  // Apple/RevCat income, auto from RevenueCat MRR if available, else manual
   const rc             = data?.revenuecat || {}
   const rcHasData      = rc.mrr != null && rc.activeSubscriptions != null
   const cpAppleNet     = (parseFloat(rcSubs.cp_apple)     || 0) * 29 * APPLE_NET_RATE
@@ -183,8 +183,8 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="bg-[#1e3a5f] text-white px-8 py-5 flex items-center justify-between">
         <div>
-          <div className="text-lg font-bold">✈️ Flight Levels — Financial Dashboard</div>
-          <div className="text-sm opacity-60">{monthName} · Last updated: {data?.fetchedAt ? new Date(data.fetchedAt).toLocaleTimeString() : '—'}</div>
+          <div className="text-lg font-bold">✈️ Flight Levels · Financial Dashboard</div>
+          <div className="text-sm opacity-60">{monthName} · Last updated: {data?.fetchedAt ? new Date(data.fetchedAt).toLocaleTimeString() : 'n/a'}</div>
         </div>
         <button
           onClick={() => handleFetch(password)}
@@ -218,7 +218,7 @@ export default function AdminDashboard() {
             </h2>
 
             {rcHasData ? (
-              // Auto mode — RevenueCat has data
+              // Auto mode, RevenueCat has data
               <>
                 <div className="flex items-center justify-between py-2.5 border-b border-gray-50">
                   <div>
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
               </div>
             ))}
 
-            {/* Anthropic — auto-calculated from Supabase token log */}
+            {/* Anthropic, auto-calculated from Supabase token log */}
             <div className="py-2 border-b border-gray-50">
               <div className="flex items-center justify-between">
                 <div>
@@ -464,7 +464,7 @@ export default function AdminDashboard() {
         {stripe.monthlyRevenue && Object.keys(stripe.monthlyRevenue).length > 0 && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
             <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-1">📈 Revenue History</h2>
-            <p className="text-xs text-gray-400 mb-4">Web (Stripe) + App Store — net after all platform fees</p>
+            <p className="text-xs text-gray-400 mb-4">Web (Stripe) + App Store, net after all platform fees</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
               {Object.entries(stripe.monthlyRevenue)
                 .sort((a, b) => b[0].localeCompare(a[0]))
@@ -491,7 +491,7 @@ export default function AdminDashboard() {
         {data?.subscribers?.history?.length > 0 && (
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400">📈 Subscriber Growth — Last 6 Weeks</h2>
+              <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400">📈 Subscriber Growth · Last 6 Weeks</h2>
               <div className="flex items-center gap-4 text-xs text-gray-400">
                 <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 bg-indigo-500 rounded"></span>Total</span>
                 <span className="flex items-center gap-1.5"><span className="inline-block w-3 h-0.5 bg-blue-500 rounded"></span>Web</span>
@@ -500,9 +500,9 @@ export default function AdminDashboard() {
             </div>
             <LineChart data={data.subscribers.history} />
             <div className="flex justify-between mt-3 text-xs text-gray-400">
-              <span>Web: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.stripe ?? '—'}</strong></span>
-              <span>App Store: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.appStore ?? '—'}</strong></span>
-              <span>Total: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.total ?? '—'}</strong></span>
+              <span>Web: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.stripe ?? 'n/a'}</strong></span>
+              <span>App Store: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.appStore ?? 'n/a'}</strong></span>
+              <span>Total: <strong className="text-gray-600">{data.subscribers.history[data.subscribers.history.length-1]?.total ?? 'n/a'}</strong></span>
             </div>
             {data.subscribers.activeEmails?.length > 0 && (
               <details className="mt-3">
@@ -520,7 +520,7 @@ export default function AdminDashboard() {
         )}
 
         <div className="text-center text-xs text-gray-400 mt-6">
-          Private dashboard · Not indexed · Numbers reset on page refresh — use the HTML tracker on your Desktop to save monthly records
+          Private dashboard · Not indexed · Numbers reset on page refresh. Use the HTML tracker on your Desktop to save monthly records.
         </div>
       </div>
     </main>

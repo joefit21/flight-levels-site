@@ -9,7 +9,7 @@ const geistSans = Geist({
 export const metadata = {
   metadataBase: new URL("https://www.flight-levels.com"),
   title: {
-    default: "Flight Levels | Joe Mattison — CFI, Mountain Flying Instructor · Longmont, CO",
+    default: "Flight Levels | Joe Mattison, CFI and Mountain Flying Instructor · Longmont, CO",
     template: "%s | Flight Levels",
   },
   description:
@@ -43,18 +43,18 @@ export const metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Flight Levels | Joe Mattison — CFI, Mountain Flying Instructor · Longmont, CO",
+    title: "Flight Levels | Joe Mattison, CFI and Mountain Flying Instructor · Longmont, CO",
     description:
       "Certificated flight instructor and former Denver ARTCC controller based at KLMO, Longmont, Colorado. Mountain flying, flight reviews, IPCs, and destination pilot orientation.",
     url: "https://www.flight-levels.com",
     siteName: "Flight Levels",
     type: "website",
     locale: "en_US",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Joe Mattison — CFI, Mountain Flying Instructor, Longmont Colorado" }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Joe Mattison, CFI and Mountain Flying Instructor, Longmont Colorado" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Flight Levels | Joe Mattison — CFI, Mountain Flying Instructor · Longmont, CO",
+    title: "Flight Levels | Joe Mattison, CFI and Mountain Flying Instructor · Longmont, CO",
     description:
       "Certificated flight instructor and former Denver ARTCC controller based at KLMO, Longmont, Colorado. Mountain flying, flight reviews, IPCs, and destination pilot orientation.",
   },
