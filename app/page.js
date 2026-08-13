@@ -180,7 +180,7 @@ export default function Home() {
             <span className="text-white font-semibold text-sm group-hover:underline">Start here &rarr;</span>
           </a>
           <a
-            href="#services"
+            href="#ai-tools"
             className="group bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/50 rounded-2xl p-6 transition flex flex-col"
           >
             <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Training for a checkride or review</div>
@@ -454,7 +454,7 @@ export default function Home() {
           </div>
 
           {/* Online Services + Apps */}
-          <div className="mt-12">
+          <div id="ai-tools" className="mt-12 scroll-mt-28">
             <div className="flex items-center gap-3 mb-8">
               <div className="h-px flex-1 bg-gray-200" />
               <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">Online & AI Training Tools</span>
