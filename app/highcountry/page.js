@@ -94,6 +94,23 @@ export default function HighCountryIndexPage() {
         </div>
       </section>
 
+      <section className="px-8 pb-4 max-w-3xl mx-auto">
+        <Link
+          href="/mountains"
+          className="block bg-gray-50 border border-gray-100 rounded-2xl px-8 py-7 hover:border-blue-200 transition"
+        >
+          <span className="text-xs font-semibold uppercase tracking-wide text-[#1d4ed8] mb-2 block">
+            Flying a piston single VFR?
+          </span>
+          <h2 className="text-xl font-bold text-[#1e3a5f] mb-2">Mountain Flying Guides</h2>
+          <p className="text-gray-600 text-sm leading-relaxed">
+            These pages assume you&rsquo;re coming in IFR. The companion set covers the VFR side: which passes to
+            cross, which cameras and AWOS actually matter, and where the precautionary stops are. Read the guides
+            &rarr;
+          </p>
+        </Link>
+      </section>
+
       <section className="bg-gray-50 px-8 py-16">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-[#1e3a5f] mb-2">More Airports Coming</h2>

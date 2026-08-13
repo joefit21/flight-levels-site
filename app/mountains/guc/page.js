@@ -6,6 +6,8 @@ import PassesInDetail from './PassesInDetail'
 import AtcComms from './AtcComms'
 import { RouteProvider } from './RouteContext'
 import GuideCta from '../../components/GuideCta'
+import RelatedGuides from '../../components/RelatedGuides'
+import { guideSchema } from '../../lib/schema'
 
 export const metadata = {
   title: 'Gunnison-Crested Butte (GUC): Mountain Flying Route Guide',
@@ -23,18 +25,43 @@ export const metadata = {
   },
 }
 
+const FAQ = [
+  {
+    q: 'What frequency will I use flying into Gunnison past Monarch Pass?',
+    a: 'Denver Center on 124.5, off the Gunnison Airport transmitter, once you are past Monarch Pass. Reception is strong and there is no further switch before you land. That is the difference from the Montrose route, where you would eventually change again to 127.1 off the Montrose transmitter.',
+  },
+  {
+    q: 'Which passes are on the route from the Front Range to Gunnison?',
+    a: 'The south route, which is primary, crosses Kenosha Pass at 10,001 feet, Trout Creek Pass at 9,346 feet, and Monarch Pass at 11,312 feet. Monarch is the crux: downdrafts there can outrun a normally aspirated single’s climb in nothing worse than moderate wind.',
+  },
+  {
+    q: 'How do I get to Gunnison if the south route is closed out by weather?',
+    a: 'The north alternate runs Rollins or Berthoud Pass, Kremmling, an Eagle County overflight, and Cottonwood Pass near Gypsum, then continues past Montrose and back east to Gunnison. It is considerably longer, and you switch to Denver Center on 124.5 about 20 miles east of Montrose.',
+  },
+]
+
+const RELATED = [
+  {
+    href: '/mountains/mtj',
+    label: 'Montrose Regional (MTJ)',
+    note: 'Identical south route as far as Gunnison, then continues west to Montrose.',
+  },
+  {
+    href: '/mountains/tex',
+    label: 'Telluride Regional (TEX)',
+    note: 'Shares the Kenosha, Trout Creek and Monarch crossings before carrying on southwest.',
+  },
+]
+
 export default function GucPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLd = guideSchema({
     headline: 'Gunnison-Crested Butte (GUC): Mountain Flying Route Guide',
     description:
       'North and south routes into Gunnison-Crested Butte from the Front Range, the passes on each, and which weather cameras and AWOS to check before you go.',
-    author: { '@type': 'Person', name: 'Joe Mattison', url: 'https://www.flight-levels.com' },
-    publisher: { '@type': 'Person', name: 'Joe Mattison' },
+    url: 'https://www.flight-levels.com/mountains/guc',
     datePublished: '2026-08-07',
-    mainEntityOfPage: 'https://www.flight-levels.com/mountains/guc',
-  }
+    faq: FAQ,
+  })
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -106,6 +133,8 @@ export default function GucPage() {
             <AtcComms guide="guc" />
           </div>
         </RouteProvider>
+
+        <RelatedGuides items={RELATED} />
 
         <GuideCta guide="guc" />
       </article>

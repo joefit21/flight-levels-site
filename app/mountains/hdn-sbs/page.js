@@ -6,6 +6,8 @@ import PassesInDetail from './PassesInDetail'
 import AtcComms from './AtcComms'
 import { RouteProvider } from './RouteContext'
 import GuideCta from '../../components/GuideCta'
+import RelatedGuides from '../../components/RelatedGuides'
+import { guideSchema } from '../../lib/schema'
 
 export const metadata = {
   title: 'Steamboat Springs (SBS): Mountain Flying Route Guide',
@@ -23,18 +25,43 @@ export const metadata = {
   },
 }
 
+const FAQ = [
+  {
+    q: 'Which route should I fly from the Front Range to Steamboat Springs?',
+    a: 'The south route is primary: Rollins or Berthoud Pass, then Granby and Kremmling, then Rabbit Ears Pass at 9,426 feet into Steamboat. It is well covered by cameras and AWOS but crosses higher, near 11,700 feet. The north alternate follows the foothills past Fort Collins, up the Poudre Canyon over Cameron Pass at 10,276 feet, then over Rabbit Ears. It crosses lower but has a real gap in weather coverage.',
+  },
+  {
+    q: 'Where is the weather coverage gap flying to Steamboat Springs?',
+    a: 'On the north route over Cameron Pass. There is no AWOS at the pass itself, and Jackson County (K33V) is the closest reporting station despite being some distance away. The south route by contrast has Dakota Hill, Empire, Granby, Kremmling and Walton Peak along the way.',
+  },
+  {
+    q: 'What frequency will I use flying into Steamboat Springs?',
+    a: 'On the south route: Denver Approach on 126.1 until Rollins or Berthoud, Denver Center on 128.65 off Kremmling, then Denver Center on 126.5 off the Rabbit Ears transmitter once abeam Kremmling airport. On the north route: Denver Approach on 134.85 out of Denver, then Denver Center on 126.5 once abeam Fort Collins-Loveland, all the way to Steamboat.',
+  },
+]
+
+const RELATED = [
+  {
+    href: '/mountains/mtj',
+    label: 'Montrose Regional (MTJ)',
+    note: 'Its north route shares the Rollins and Berthoud crossings before turning southwest.',
+  },
+  {
+    href: '/mountains/ase',
+    label: 'Aspen-Pitkin County (ASE)',
+    note: 'Also reached over Rollins or Berthoud, then west through Kremmling and Eagle County.',
+  },
+]
+
 export default function HdnSbsPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLd = guideSchema({
     headline: 'Steamboat Springs (SBS): Mountain Flying Route Guide',
     description:
       'North and south routes into Steamboat Springs from the Front Range, the passes on each, and which weather cameras and AWOS to check before you go.',
-    author: { '@type': 'Person', name: 'Joe Mattison', url: 'https://www.flight-levels.com' },
-    publisher: { '@type': 'Person', name: 'Joe Mattison' },
+    url: 'https://www.flight-levels.com/mountains/hdn-sbs',
     datePublished: '2026-08-07',
-    mainEntityOfPage: 'https://www.flight-levels.com/mountains/hdn-sbs',
-  }
+    faq: FAQ,
+  })
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -106,6 +133,8 @@ export default function HdnSbsPage() {
             <AtcComms guide="hdn-sbs" />
           </div>
         </RouteProvider>
+
+        <RelatedGuides items={RELATED} />
 
         <GuideCta guide="hdn-sbs" />
       </article>

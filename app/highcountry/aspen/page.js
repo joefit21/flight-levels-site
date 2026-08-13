@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Nav from '../../components/Nav'
 import Footer from '../../components/Footer'
 import HighCountryCta from '../../components/HighCountryCta'
+import RelatedGuides from '../../components/RelatedGuides'
+import { guideSchema } from '../../lib/schema'
 import { ArrivalFlow, DepartureFlow } from './FlowDiagram'
 
 export const metadata = {
@@ -45,18 +47,59 @@ const GATES = [
   { fix: 'HBU', dir: 'South', turn: 'Left turn', note: 'Toward the San Luis Valley and the New Mexico side.' },
 ]
 
+const FAQ = [
+  {
+    q: 'Which STAR will I be assigned into Aspen?',
+    a: 'It depends on your direction of flight. From the east you get the MMARY. From the southwest, the LOYYD. From the south and southeast, the HAREI. There is no real ambiguity about which one you will be given, so you can brief the arrival before you ever file.',
+  },
+  {
+    q: 'What departure will I get out of Aspen?',
+    a: 'The LINDZ, every time. Every IFR departure off Aspen flies it, so brief it as a certainty rather than a possibility. It takes you north out of the valley, and from there you turn right on course for the SXW or JNETT gates, or left for the SLOLM or HBU gates.',
+  },
+  {
+    q: 'How do I get an IFR clearance at Aspen when the tower is closed?',
+    a: 'Call Denver Center on 119.85. The Aspen tower is open 0700 to 2000 local, and within those hours you call clearance delivery the way you would at any towered field. Outside them there is nobody in the tower to call, and 119.85 off the Aspen transmitter works on the ground at the airport.',
+  },
+  {
+    q: 'What climb gradient does the LINDZ departure require?',
+    a: '465 feet per nautical mile up to 10,600 feet, then the standard 200 feet per nautical mile above that. Departing IFR you either meet that performance or you request a VFR climb from clearance delivery.',
+  },
+  {
+    q: 'Why does Aspen depart aircraft toward arriving traffic?',
+    a: 'Aspen routinely runs opposite direction operations, landing south on runway 15 while departing north on runway 33. The controller times departures to launch while an arrival is inbound, so from the arrival you can see an airplane lifting off pointed at you. The LINDZ is designed for exactly this: the departure track offsets from the arrival course and climbs above it, so separation comes from the procedure rather than from the controller improvising.',
+  },
+  {
+    q: 'Where should I divert if I cannot get into Aspen?',
+    a: 'Rifle is usually the answer. It has substantially lower approach minimums, so on a day when Aspen is out Rifle is often comfortably in, and it has a good FBO plus a straightforward drive to Aspen up Interstate 70. Expect company, though. Weather bad enough to send you to Rifle is bad enough to send everyone else there too.',
+  },
+  {
+    q: 'What tailwind should I expect landing at Aspen?',
+    a: 'Runway 15 is the primary arrival runway and landing that direction frequently means a tailwind. There are 8,000 feet of pavement, but a tailwind component increases ground roll substantially, so decide what you are willing to accept before you start the approach rather than while you are flying it.',
+  },
+]
+
+const RELATED = [
+  {
+    href: '/mountains/ase',
+    label: 'Aspen (ASE): VFR Mountain Flying Guide',
+    note: 'The same airport from the piston VFR side: which passes to cross, and the cameras and AWOS to check before you go.',
+  },
+  {
+    href: '/mountains/return-rule',
+    label: 'The Return Rule',
+    note: 'What to do once you do not like what you are seeing, on any route into the mountains.',
+  },
+]
+
 export default function AspenIfrPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLd = guideSchema({
     headline: 'Aspen (ASE) IFR Arrivals and Departures: What ATC Will Actually Give You',
     description:
       'Which STAR you get into Aspen based on your direction of flight, how the arrival and departure flow works, the LINDZ climb gradient, and when to divert to Rifle.',
-    author: { '@type': 'Person', name: 'Joe Mattison', url: 'https://www.flight-levels.com' },
-    publisher: { '@type': 'Person', name: 'Joe Mattison' },
+    url: 'https://www.flight-levels.com/highcountry/aspen',
     datePublished: '2026-08-11',
-    mainEntityOfPage: 'https://www.flight-levels.com/highcountry/aspen',
-  }
+    faq: FAQ,
+  })
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -277,6 +320,8 @@ export default function AspenIfrPage() {
           time a chart is amended and the name does not. This page describes what to expect, not what to navigate by.
           Fly the current charts.
         </p>
+
+        <RelatedGuides items={RELATED} />
 
         <HighCountryCta page="aspen" />
       </article>

@@ -6,6 +6,8 @@ import PassesInDetail from './PassesInDetail'
 import AtcComms from './AtcComms'
 import { RouteProvider } from './RouteContext'
 import GuideCta from '../../components/GuideCta'
+import RelatedGuides from '../../components/RelatedGuides'
+import { guideSchema } from '../../lib/schema'
 
 export const metadata = {
   title: 'Telluride Regional (TEX): Mountain Flying Route Guide',
@@ -23,18 +25,43 @@ export const metadata = {
   },
 }
 
+const FAQ = [
+  {
+    q: 'What frequency covers the last leg into Telluride?',
+    a: 'Denver Center on 125.35, off the Telluride transmitter. You pick it up about 15 miles south of Montrose, over the Cones VOR (ETL) and on to Telluride, and reception is strong the rest of the way. Both the north and south routes make this same final switch.',
+  },
+  {
+    q: 'How do I fly from the Front Range to Telluride?',
+    a: 'Both routes run to Montrose first, then continue south over the Cones VOR (ETL) to Telluride. The south route is primary: Kenosha, Trout Creek and Monarch passes, then Gunnison and Montrose. The north alternate uses Rollins or Berthoud, Kremmling, an Eagle County overflight and Cottonwood Pass near Gypsum.',
+  },
+  {
+    q: 'How high is Telluride Regional Airport?',
+    a: 'Telluride Regional sits at 9,078 feet MSL, which makes it the highest commercial airport in North America. Both routes in from the Front Range also cross above 12,500 feet, so plan supplemental oxygen for the trip regardless of which one you take.',
+  },
+]
+
+const RELATED = [
+  {
+    href: '/mountains/mtj',
+    label: 'Montrose Regional (MTJ)',
+    note: 'You overfly Montrose on either route, and it is the last good bail-out before Telluride.',
+  },
+  {
+    href: '/mountains/guc',
+    label: 'Gunnison-Crested Butte (GUC)',
+    note: 'Shares the south route through Monarch Pass before the routes diverge.',
+  },
+]
+
 export default function TexPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLd = guideSchema({
     headline: 'Telluride Regional (TEX): Mountain Flying Route Guide',
     description:
       'North and south routes into Telluride from the Front Range, the passes on each, and which weather cameras and AWOS to check before you go.',
-    author: { '@type': 'Person', name: 'Joe Mattison', url: 'https://www.flight-levels.com' },
-    publisher: { '@type': 'Person', name: 'Joe Mattison' },
+    url: 'https://www.flight-levels.com/mountains/tex',
     datePublished: '2026-08-07',
-    mainEntityOfPage: 'https://www.flight-levels.com/mountains/tex',
-  }
+    faq: FAQ,
+  })
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -106,6 +133,8 @@ export default function TexPage() {
             <AtcComms guide="tex" />
           </div>
         </RouteProvider>
+
+        <RelatedGuides items={RELATED} />
 
         <GuideCta guide="tex" />
       </article>

@@ -6,6 +6,8 @@ import PassesInDetail from './PassesInDetail'
 import AtcComms from './AtcComms'
 import { RouteProvider } from './RouteContext'
 import GuideCta from '../../components/GuideCta'
+import RelatedGuides from '../../components/RelatedGuides'
+import { guideSchema } from '../../lib/schema'
 
 export const metadata = {
   title: 'Montrose Regional (MTJ): Mountain Flying Route Guide',
@@ -23,18 +25,52 @@ export const metadata = {
   },
 }
 
+const FAQ = [
+  {
+    q: 'Which route should I fly from the Front Range to Montrose Regional?',
+    a: 'There are two, and you should pick one before you leave the ground. The south route is primary: Kenosha Pass at 10,001 feet, Trout Creek Pass at 9,346, then Monarch Pass at 11,312 before Gunnison and Montrose. The north route is the alternate: Rollins or Berthoud Pass, Kremmling, an Eagle County overflight, then Cottonwood Pass near Gypsum. Both cross above 12,500 feet, so plan supplemental oxygen either way.',
+  },
+  {
+    q: 'What ATC frequency will I have crossing Monarch Pass into Montrose?',
+    a: 'Denver Center on 119.85, off the Denver and Aspen transmitters, starting about 10 miles before Kenosha Pass. Expect degraded reception below 16,000 feet from beyond Kenosha through Monarch. That is a known coverage gap rather than a problem with your radio. Once past Monarch you switch to 124.5 off the Gunnison Airport transmitter.',
+  },
+  {
+    q: 'Which pass is the hardest on the way to Montrose?',
+    a: 'Monarch Pass at 11,312 feet, on the Continental Divide between Chaffee and Gunnison counties. A weather station at the summit holds Colorado’s all-time recorded wind gust of 148 mph, and downdrafts there can outrun a normally aspirated single’s climb in nothing worse than moderate wind.',
+  },
+  {
+    q: 'Where can I stop if the weather turns on the way to Montrose?',
+    a: 'On the south route, Buena Vista (AEJ), Salida (ANK) and Gunnison (GUC). On the north route, Granby (GNB), Kremmling (20V), Eagle County (EGE) and Rifle (RIL).',
+  },
+]
+
+const RELATED = [
+  {
+    href: '/mountains/guc',
+    label: 'Gunnison-Crested Butte (GUC)',
+    note: 'Same south route as far as Gunnison, with one fewer frequency change at the end.',
+  },
+  {
+    href: '/mountains/tex',
+    label: 'Telluride Regional (TEX)',
+    note: 'Continues past Montrose to Telluride on either route, over the Cones VOR.',
+  },
+  {
+    href: '/mountains/ase',
+    label: 'Aspen-Pitkin County (ASE)',
+    note: 'Shares both routes, then turns north up the Roaring Fork Valley instead.',
+  },
+]
+
 export default function MtjPage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLd = guideSchema({
     headline: 'Montrose Regional (MTJ): Mountain Flying Route Guide',
     description:
       'North and south routes into Montrose Regional from the Front Range, the passes on each, and which weather cameras and AWOS to check before you go.',
-    author: { '@type': 'Person', name: 'Joe Mattison', url: 'https://www.flight-levels.com' },
-    publisher: { '@type': 'Person', name: 'Joe Mattison' },
+    url: 'https://www.flight-levels.com/mountains/mtj',
     datePublished: '2026-08-06',
-    mainEntityOfPage: 'https://www.flight-levels.com/mountains/mtj',
-  }
+    faq: FAQ,
+  })
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -106,6 +142,8 @@ export default function MtjPage() {
             <AtcComms guide="mtj" />
           </div>
         </RouteProvider>
+
+        <RelatedGuides items={RELATED} />
 
         <GuideCta guide="mtj" />
       </article>

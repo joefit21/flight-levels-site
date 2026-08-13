@@ -115,6 +115,23 @@ export default function MountainsIndexPage() {
         </div>
       </section>
 
+      <section className="px-8 pb-4 max-w-5xl mx-auto">
+        <Link
+          href="/highcountry"
+          className="block bg-[#0f2044] text-white rounded-2xl px-8 py-7 hover:bg-[#14294f] transition"
+        >
+          <span className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2 block">
+            Flying a turbine or high-performance single?
+          </span>
+          <h2 className="text-xl font-bold mb-2">High Country IFR</h2>
+          <p className="text-blue-100 text-sm leading-relaxed">
+            These guides are written for VFR piston flying. If you&rsquo;re coming in IFR, the companion set covers
+            which arrival ATC will assign by direction of flight, the departure gates, and how to get a clearance on
+            the ground. Read the guides &rarr;
+          </p>
+        </Link>
+      </section>
+
       <section className="bg-gray-50 px-8 py-20">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-bold text-[#1e3a5f] mb-2">More Airports Coming</h2>

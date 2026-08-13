@@ -6,6 +6,8 @@ import PassesInDetail from './PassesInDetail'
 import AtcComms from './AtcComms'
 import { RouteProvider } from './RouteContext'
 import GuideCta from '../../components/GuideCta'
+import RelatedGuides from '../../components/RelatedGuides'
+import { guideSchema } from '../../lib/schema'
 
 export const metadata = {
   title: 'Aspen-Pitkin County (ASE): Mountain Flying Route Guide',
@@ -23,18 +25,43 @@ export const metadata = {
   },
 }
 
+const FAQ = [
+  {
+    q: 'Which route should I fly from the Front Range to Aspen?',
+    a: 'The north route is primary, because it reaches Aspen directly: Rollins or Berthoud Pass, Kremmling, an Eagle County overflight, Cottonwood Pass near Gypsum, then Carbondale and up the Roaring Fork Valley. The south route is the alternate and runs all the way to Montrose before doubling back north up the valley, which makes it considerably longer.',
+  },
+  {
+    q: 'When do I switch to Aspen Approach flying into Aspen?',
+    a: 'On the north route, Aspen Approach on 123.8 off Red Table Mountain after Cottonwood Pass, and you stay with them until they hand you to tower. On the south route you pick up 123.8 about 40 miles north of Montrose, then on through Carbondale and up the valley.',
+  },
+  {
+    q: 'Which passes do I cross flying to Aspen?',
+    a: 'On the north route: Rollins Pass at 11,676 feet or Berthoud at 11,315, then Cottonwood Pass near Gypsum at 8,280 feet. On the south route: Kenosha at 10,001, Trout Creek at 9,346, and Monarch at 11,312. Both routes cross above 12,500 feet, so plan supplemental oxygen either way.',
+  },
+]
+
+const RELATED = [
+  {
+    href: '/highcountry/aspen',
+    label: 'Aspen (ASE): IFR Arrivals and Departures',
+    note: 'The same airport from the IFR side: which STAR you get by direction, the LINDZ departure gates, and clearance when the tower is closed.',
+  },
+  {
+    href: '/mountains/mtj',
+    label: 'Montrose Regional (MTJ)',
+    note: 'You overfly Montrose on the south route, and it is a useful bail-out on the way.',
+  },
+]
+
 export default function AsePage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+  const jsonLd = guideSchema({
     headline: 'Aspen-Pitkin County (ASE): Mountain Flying Route Guide',
     description:
       'North and south routes into Aspen from the Front Range, the passes on each, and which weather cameras and AWOS to check before you go.',
-    author: { '@type': 'Person', name: 'Joe Mattison', url: 'https://www.flight-levels.com' },
-    publisher: { '@type': 'Person', name: 'Joe Mattison' },
+    url: 'https://www.flight-levels.com/mountains/ase',
     datePublished: '2026-08-07',
-    mainEntityOfPage: 'https://www.flight-levels.com/mountains/ase',
-  }
+    faq: FAQ,
+  })
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
@@ -106,6 +133,8 @@ export default function AsePage() {
             <AtcComms guide="ase" />
           </div>
         </RouteProvider>
+
+        <RelatedGuides items={RELATED} />
 
         <GuideCta guide="ase" />
       </article>
