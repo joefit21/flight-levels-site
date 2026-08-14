@@ -19,16 +19,16 @@ export const metadata = {
   },
 }
 
-const PACKAGES = [
+const GROUND_PACKAGES = [
   {
     id: 'pass-briefing',
     name: 'The Pass Briefing',
-    tagline: 'Your trip, before you fly it',
+    tagline: 'Your trip, worked out before you fly it',
     price: '$300',
     priceNote: 'flat',
     badge: 'No airplane needed',
     badgeTone: 'gray',
-    body: 'We take the trip you are actually planning and work it start to finish: which route, which passes, and what the terrain does in the wind you are likely to get. Which cameras and AWOS are worth watching the morning you go, and which ones tell you nothing. What ATC will do with you, where the radio coverage falls apart, and where it comes back.',
+    body: 'We take the trip you are actually planning and work it start to finish: which route, which passes, and what the terrain tends to do in the wind you are likely to get. Which cameras and AWOS are worth watching the morning you go, and which ones tell you nothing useful. What ATC will do with you, where the radio coverage falls apart, and where it comes back.',
     includes: [
       'Route recommendation for your airplane and your date',
       'The weather sources that matter on that route, and how to read them',
@@ -36,37 +36,40 @@ const PACKAGES = [
       'Divert options, and the conditions that should send you to one',
     ],
   },
-  {
-    id: 'first-crossing',
-    name: 'The First Crossing',
-    tagline: 'Your first time over the Divide, in your own airplane',
-    price: '$1,000',
-    priceNote: 'one day',
-    badge: 'Flown in your airplane',
-    badgeTone: 'blue',
-    body: 'For the pilot with a capable airplane who has never taken it into the mountains. We fly a real route out of the Front Range, cross a real pass, land at a real mountain airport, and come back. You fly the entire time. I am there for the parts that do not come from a book: reading the terrain, picking the line, and knowing when the answer is to go home.',
-    includes: [
-      'Pre-flight planning session, the Pass Briefing built in',
-      'A full day flying a real mountain route, you in the left seat',
-      'Pass crossing, terrain reading, and route selection in practice',
-      'Debrief, and a plan for the trip you are actually working toward',
-    ],
-  },
+]
+
+const FLYING_PACKAGES = [
   {
     id: 'cleared-into-aspen',
     name: 'Cleared Into Aspen',
-    tagline: 'Or Eagle, Steamboat, or Telluride',
+    tagline: 'Or Eagle, Steamboat, Telluride, wherever you are headed',
     price: 'From $1,200',
     priceNote: 'one day',
     badge: 'Flown in your airplane',
     badgeTone: 'blue',
     featured: true,
-    body: 'The destination checkout. We fly into the airport you actually want to take your family to, on the arrival you will actually be given, and land there. Aspen is the one most pilots are quietly afraid of, and it earns that. Eagle, Steamboat and Telluride work exactly the same way. By the time you do it with people in the back, you will have already done it once.',
+    body: 'We fly into the airport you actually want to take your family to, on the arrival you will actually be given, and land there. We will put down at a field or two on the way, so your destination is not the first mountain runway you see that day. Aspen is the one most pilots are quietly afraid of and it earns that, but the day works the same way whichever field you have in mind.',
     includes: [
-      'Destination-specific briefing before we go',
-      'The real arrival, the real approach, and a landing at the field',
-      'What the controller is doing with you and why, from someone who did it',
-      'The departure too, which is the half most first-timers have not thought about',
+      'The ground briefing, same morning or ahead of time, whichever suits you',
+      'Two or three mountain fields across the day, finishing at your destination',
+      'The real arrival and approach, and the departure, which is the half most people have not thought about',
+      'What the controller is doing with you and why, from someone who did the job',
+    ],
+  },
+  {
+    id: 'colorado-loop',
+    name: 'The Colorado Loop',
+    tagline: 'The high country, not one airport',
+    price: 'From $2,400',
+    priceNote: 'two days',
+    badge: 'Flown in your airplane',
+    badgeTone: 'blue',
+    body: 'A circuit rather than a single destination. Something along the lines of Steamboat, Eagle County, Aspen and Gunnison with an overnight in the middle, built around whichever fields you care about. Two days buys you something one cannot: different terrain, different field elevations, and the same mountains behaving differently in the morning than they do in the afternoon.',
+    includes: [
+      'The ground briefing, covering the whole circuit rather than one arrival',
+      'Four or more mountain airports across two days',
+      'Morning and afternoon conditions, which are genuinely different problems',
+      'An overnight at a mountain field, and the next-morning departure that follows it',
     ],
   },
 ]
@@ -86,7 +89,7 @@ export default function FlyWithMePage() {
         hasOfferCatalog: {
           '@type': 'OfferCatalog',
           name: 'Mountain flying packages',
-          itemListElement: PACKAGES.map((p) => ({
+          itemListElement: [...GROUND_PACKAGES, ...FLYING_PACKAGES].map((p) => ({
             '@type': 'Offer',
             name: p.name,
             description: p.tagline,
@@ -122,15 +125,16 @@ export default function FlyWithMePage() {
         <h2 className="text-2xl font-bold text-[#1e3a5f] mb-5">Who this is for</h2>
         <div className="space-y-4 text-gray-600 leading-relaxed">
           <p>
-            You own or have access to a capable airplane, you are current and comfortable flying it, and the thing
-            standing between you and a ski trip is terrain you have never flown into. That is a knowledge problem, not
-            a skill problem, and it is a solvable one.
+            You own a capable airplane. You are current in it and comfortable flying it. What stands between you and
+            a ski trip is terrain you have never flown into.
           </p>
           <p>
-            I do not have a rental airplane, and I have come to think that is the right way round for this. We fly{' '}
-            <span className="font-semibold text-[#1e3a5f]">your airplane</span>, from your field, on the route you
-            will actually fly, at the weights you will actually carry. A checkout in a rented 172 you will never see
-            again teaches you considerably less about what your airplane does at 12,000 feet on a warm afternoon.
+            That is a knowledge problem rather than a skill problem, and it is a solvable one.
+          </p>
+          <p>
+            We fly <span className="font-semibold text-[#1e3a5f]">your airplane</span>, from your field, on the route
+            you will actually fly, at the weights you will actually carry. A checkout in a rented 172 you will never
+            see again teaches you very little about what your airplane does at 12,000 feet on a warm afternoon.
           </p>
           <p>
             What I will not do is tell you your limits. You are the pilot in command and that decision stays yours.
@@ -140,19 +144,51 @@ export default function FlyWithMePage() {
       </section>
 
       <section className="px-8 pb-16 max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold text-[#1e3a5f] mb-2">How we work together</h2>
-        <p className="text-gray-500 mb-8">
-          Flat pricing. No hourly clock to watch, for either of us.
+        <h2 className="text-2xl font-bold text-[#1e3a5f] mb-2">Two ways to do this</h2>
+        <p className="text-gray-500 mb-10">
+          Flat pricing, no hourly clock to watch for either of us. These are not steps in a sequence. Pick the one
+          that fits.
         </p>
-        <div className="grid gap-6">
-          {PACKAGES.map((p) => (
+
+        <div className="flex items-center gap-3 mb-6">
+          <div className="h-px flex-1 bg-gray-200" />
+          <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+            You fly it yourself
+          </span>
+          <div className="h-px flex-1 bg-gray-200" />
+        </div>
+        <div className="grid gap-6 mb-6">
+          {GROUND_PACKAGES.map((p) => (
             <PackageCard key={p.id} pkg={p} />
           ))}
         </div>
+        <p className="text-sm text-gray-500 mb-12 leading-relaxed">
+          This is a complete product on its own, not a first step toward anything. Plenty of pilots take the briefing,
+          fly the trip themselves, and never need me in the airplane. That is a perfectly good outcome and I would
+          rather you have the information than not.
+        </p>
+
+        <div className="flex items-center gap-3 mb-6">
+          <div className="h-px flex-1 bg-gray-200" />
+          <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+            I come with you
+          </span>
+          <div className="h-px flex-1 bg-gray-200" />
+        </div>
+        <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+          Both of these include the ground briefing, whether we do it the same morning or a week ahead. No need to buy
+          it separately.
+        </p>
+        <div className="grid gap-6">
+          {FLYING_PACKAGES.map((p) => (
+            <PackageCard key={p.id} pkg={p} />
+          ))}
+        </div>
+
         <p className="text-xs text-gray-400 mt-6 leading-relaxed">
-          Day rates cover my time. Aircraft operating costs, fuel, and any landing or ramp fees are yours, and travel
-          is billed separately if we are meeting somewhere other than the Front Range. If weather scrubs the day we
-          reschedule, no charge.
+          Day rates cover my time. Aircraft operating costs, fuel, and any landing or ramp fees are yours. Travel is
+          billed separately if we are meeting somewhere other than the Front Range, as is lodging on the two-day
+          circuit. If weather scrubs a day we reschedule, no charge.
         </p>
       </section>
 
