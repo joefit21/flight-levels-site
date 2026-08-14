@@ -59,17 +59,17 @@ const FLYING_PACKAGES = [
   {
     id: 'colorado-loop',
     name: 'The Colorado Loop',
-    tagline: 'The corners a day trip cannot reach, and a real return leg',
+    tagline: 'The whole trip, including the morning you have to leave',
     price: 'From $2,400',
     priceNote: 'two days',
     badge: 'Flown in your airplane',
     badgeTone: 'blue',
-    body: 'Two days is not one day twice. A day out of the Front Range has to turn around and come home, which quietly puts the far side of the state out of range. Two days opens up Telluride, Montrose and the western slope, and it puts a night between the outbound and the return. That second part matters more than it sounds: you fly home in whatever weather turned up while you were there, which is exactly what a real trip does to you.',
+    body: 'A single day always starts and ends at your home field, so there is one thing it can never show you: walking out to your airplane at a mountain airport on a cold morning and taking it home. That is the half of the trip that tends to go wrong. Frost on the wings at 7,800 feet, a wind that is nothing like yesterday afternoon, and a schedule quietly telling you it is time to go. It also happens to be the half where you get a night in a mountain town, which is presumably part of why you bought the airplane.',
     includes: [
-      'Everything in a single day, over a much wider piece of Colorado',
-      'Fields that do not fit inside an out-and-back from the Front Range',
-      'A return leg flown a day later in different weather, which is the part that catches people',
-      'Dinner in Aspen and a cold morning departure, or home to the Front Range each night, however you want to run it',
+      'The ground briefing, covering both days',
+      'A morning departure off a mountain field, which is a different airplane than the one you landed there',
+      'Leaving it overnight at altitude: tie-down, frost, preheat, and which FBOs are actually open when you need them',
+      'The call on whether to come home, made with me sitting next to you, which is the decision that hurts people',
     ],
   },
 ]
@@ -177,11 +177,12 @@ export default function FlyWithMePage() {
         </div>
         <div className="bg-blue-50 border border-blue-100 rounded-lg px-5 py-4 mb-6">
           <p className="text-sm text-gray-700 leading-relaxed">
-            <span className="font-semibold text-[#1e3a5f]">The difference is reach, not volume.</span> Both fly
-            several mountain airports in a day, both include the ground briefing, and both put you in the left seat
-            the whole time. One day is a round trip out of the Front Range and is the right answer if you have a
-            destination in mind. Two days reaches the far side of the state and brings you home on a different day in
-            different weather.
+            <span className="font-semibold text-[#1e3a5f]">Same airports either way.</span> Both days fly several
+            mountain fields, both include the ground briefing, and both put you in the left seat the whole time.
+            There is no airport you can reach in two days that you cannot reach in one. The difference is that a
+            single day gets you there and back, while two days adds the part a day trip structurally cannot include:
+            leaving your airplane at a mountain field overnight, and flying it home the next morning in whatever
+            weather has turned up.
           </p>
         </div>
         <div className="grid gap-6">
