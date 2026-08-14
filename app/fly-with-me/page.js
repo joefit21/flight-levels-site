@@ -42,16 +42,16 @@ const FLYING_PACKAGES = [
   {
     id: 'cleared-into-aspen',
     name: 'Cleared Into Aspen',
-    tagline: 'Or Eagle, Steamboat, Telluride, wherever you are headed',
+    tagline: 'You have a destination in mind. This is that day.',
     price: 'From $1,200',
     priceNote: 'one day',
     badge: 'Flown in your airplane',
     badgeTone: 'blue',
     featured: true,
-    body: 'We fly into the airport you actually want to take your family to, on the arrival you will actually be given, and land there. We will put down at a field or two on the way, so your destination is not the first mountain runway you see that day. Aspen is the one most pilots are quietly afraid of and it earns that, but the day works the same way whichever field you have in mind.',
+    body: 'We fly into the airport you actually want to take your family to, on the arrival you will actually be given, and land there. We will work several mountain fields across the day, so your destination is not the first mountain runway you see. Aspen is the one most pilots are quietly afraid of and it earns that, but the day runs the same way whichever field you have in mind.',
     includes: [
       'The ground briefing, same morning or ahead of time, whichever suits you',
-      'Two or three mountain fields across the day, finishing at your destination',
+      'Several mountain fields across the day, finishing at the one you came for',
       'The real arrival and approach, and the departure, which is the half most people have not thought about',
       'What the controller is doing with you and why, from someone who did the job',
     ],
@@ -59,16 +59,16 @@ const FLYING_PACKAGES = [
   {
     id: 'colorado-loop',
     name: 'The Colorado Loop',
-    tagline: 'The high country, not one airport',
+    tagline: 'The corners a day trip cannot reach, and a real return leg',
     price: 'From $2,400',
     priceNote: 'two days',
     badge: 'Flown in your airplane',
     badgeTone: 'blue',
-    body: 'A circuit rather than a single destination. Something along the lines of Steamboat, Eagle County, Aspen and Gunnison, built around whichever fields you care about. Two days buys you what one cannot: different terrain, different field elevations, and the same mountains behaving differently in the morning than they do in the afternoon. Where we finish each day is your call, which is rather the point of having your own airplane.',
+    body: 'Two days is not one day twice. A day out of the Front Range has to turn around and come home, which quietly puts the far side of the state out of range. Two days opens up Telluride, Montrose and the western slope, and it puts a night between the outbound and the return. That second part matters more than it sounds: you fly home in whatever weather turned up while you were there, which is exactly what a real trip does to you.',
     includes: [
-      'The ground briefing, covering the whole circuit rather than one arrival',
-      'Four or more mountain airports across two days',
-      'Morning and afternoon conditions, which are genuinely different problems',
+      'Everything in a single day, over a much wider piece of Colorado',
+      'Fields that do not fit inside an out-and-back from the Front Range',
+      'A return leg flown a day later in different weather, which is the part that catches people',
       'Dinner in Aspen and a cold morning departure, or home to the Front Range each night, however you want to run it',
     ],
   },
@@ -175,10 +175,15 @@ export default function FlyWithMePage() {
           </span>
           <div className="h-px flex-1 bg-gray-200" />
         </div>
-        <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-          Both of these include the ground briefing, whether we do it the same morning or a week ahead. No need to buy
-          it separately.
-        </p>
+        <div className="bg-blue-50 border border-blue-100 rounded-lg px-5 py-4 mb-6">
+          <p className="text-sm text-gray-700 leading-relaxed">
+            <span className="font-semibold text-[#1e3a5f]">The difference is reach, not volume.</span> Both fly
+            several mountain airports in a day, both include the ground briefing, and both put you in the left seat
+            the whole time. One day is a round trip out of the Front Range and is the right answer if you have a
+            destination in mind. Two days reaches the far side of the state and brings you home on a different day in
+            different weather.
+          </p>
+        </div>
         <div className="grid gap-6">
           {FLYING_PACKAGES.map((p) => (
             <PackageCard key={p.id} pkg={p} />
