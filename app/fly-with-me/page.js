@@ -32,7 +32,7 @@ const GROUND_PACKAGES = [
     includes: [
       'Route recommendation for your airplane and your date',
       'The weather sources that matter on that route, and how to read them',
-      'What to expect from Denver Center, and where you will lose them',
+      'Where radar coverage thins, where the radio goes quiet, and where neither is a concern',
       'Divert options, and the conditions that should send you to one',
     ],
   },
@@ -64,12 +64,12 @@ const FLYING_PACKAGES = [
     priceNote: 'two days',
     badge: 'Flown in your airplane',
     badgeTone: 'blue',
-    body: 'A circuit rather than a single destination. Something along the lines of Steamboat, Eagle County, Aspen and Gunnison with an overnight in the middle, built around whichever fields you care about. Two days buys you something one cannot: different terrain, different field elevations, and the same mountains behaving differently in the morning than they do in the afternoon.',
+    body: 'A circuit rather than a single destination. Something along the lines of Steamboat, Eagle County, Aspen and Gunnison, built around whichever fields you care about. Two days buys you what one cannot: different terrain, different field elevations, and the same mountains behaving differently in the morning than they do in the afternoon. Where we finish each day is your call, which is rather the point of having your own airplane.',
     includes: [
       'The ground briefing, covering the whole circuit rather than one arrival',
       'Four or more mountain airports across two days',
       'Morning and afternoon conditions, which are genuinely different problems',
-      'An overnight at a mountain field, and the next-morning departure that follows it',
+      'Dinner in Aspen and a cold morning departure, or home to the Front Range each night, however you want to run it',
     ],
   },
 ]
@@ -197,16 +197,20 @@ export default function FlyWithMePage() {
           <h2 className="text-2xl font-bold text-[#1e3a5f] mb-5">Why me and not any other CFI</h2>
           <div className="space-y-4 text-gray-600 leading-relaxed">
             <p>
-              Plenty of instructors in Colorado can teach you mountain flying, and some of them have been doing it
-              longer than I have. Here is the part that is harder to find: before I was teaching in this airspace, I
-              was working it, as a controller at Denver ARTCC.
+              Colorado has no shortage of good mountain flying instructors, and several of them have been at it a
+              long time. What it has very few of is someone who worked this airspace from the other side of the
+              radio. Before I was teaching in it, I was a controller at Denver ARTCC.
             </p>
             <p>
-              That means I can tell you which arrival you are going to be assigned before you file, why the gates sit
-              where they do, where you will lose Center and where you will get them back, and what the controller is
-              trying to accomplish when they do something that seems strange. That is not something you learn from
-              the other side of the radio, and it is most of what makes these trips feel unpredictable to a
-              first-timer.
+              That means I can tell you which arrival you are going to be assigned before you file, and why the gates
+              sit where they do. It also means I know where radar coverage thins out and where the radio goes quiet,
+              which are two different questions with two different answers, and where neither one is a problem at
+              all. Most pilots find that out by being surprised at the wrong moment.
+            </p>
+            <p>
+              And when a controller does something that seems strange, I can usually tell you what they were trying
+              to accomplish. That is not something you learn from the cockpit, and it is most of what makes these
+              trips feel unpredictable the first time.
             </p>
           </div>
           <div className="flex flex-wrap gap-3 mt-6">
