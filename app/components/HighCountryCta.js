@@ -13,7 +13,7 @@ export default function HighCountryCta({ page }) {
         while you fly your airplane.
       </p>
       <Link
-        href="/#contact"
+        href="/fly-with-me"
         onClick={() => trackEvent('highcountry_contact_click', { page })}
         className="inline-block bg-white text-[#0f2044] hover:bg-blue-50 px-6 py-3 rounded-lg font-semibold transition"
       >

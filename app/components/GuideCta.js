@@ -14,11 +14,11 @@ export default function GuideCta({ guide }) {
         <p className="text-gray-600 text-sm">I offer pre-trip briefings and mountain flying instruction based at KLMO.</p>
       </div>
       <Link
-        href="/#contact"
+        href="/fly-with-me"
         onClick={() => trackContactClick(guide)}
         className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap"
       >
-        Get in Touch
+        Fly With Me
       </Link>
     </div>
   )
