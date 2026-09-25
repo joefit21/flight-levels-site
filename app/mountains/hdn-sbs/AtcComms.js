@@ -83,11 +83,29 @@ function CommsStrip({ route }) {
 }
 
 export default function AtcComms({ guide }) {
-  const { route } = useRoute()
+  const { route, setRoute } = useRoute()
   const zones = COMMS[route]
 
   return (
     <div>
+      <div className="flex gap-2 mb-4" role="tablist" aria-label="Route selection">
+        {['south', 'north'].map((key) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={route === key}
+            onClick={() => setRoute(key)}
+            className={`flex-1 text-sm font-semibold px-4 py-2.5 rounded-lg border transition focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+              route === key
+                ? 'bg-[#1d4ed8] text-white border-[#1d4ed8]'
+                : 'bg-white text-gray-500 border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            {key === 'north' ? 'North' : 'South'}
+          </button>
+        ))}
+      </div>
       <p className="text-xs text-gray-400 mb-4">
         Showing the {route === 'south' ? 'South · Primary' : 'North · Alternate'} route. Same pass positions as the
         map below, so you can line up exactly where each frequency change happens.
