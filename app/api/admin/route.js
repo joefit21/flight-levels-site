@@ -18,6 +18,9 @@ export async function GET(req) {
   return Response.json({ stripe, revenuecat, anthropic, subscribers, fetchedAt: new Date().toISOString() })
 }
 
+// Test accounts to exclude from subscriber counts and MRR
+const TEST_EMAILS = new Set(['jmattiso@gmail.com', 'katiebryant29@gmail.com'])
+
 // ── Stripe ────────────────────────────────────────────────────────
 async function fetchStripe() {
   const key = process.env.STRIPE_SECRET_KEY
@@ -32,10 +35,10 @@ async function fetchStripe() {
     const balanceRes = await fetch('https://api.stripe.com/v1/balance', { headers })
     const balance = await balanceRes.json()
 
-    // Active subscriptions
+    // Active subscriptions, expanding product info and customer email for test-account filtering
     const subsRes = await fetch(
       'https://api.stripe.com/v1/subscriptions?status=active&limit=100&' +
-      'expand%5B%5D=data.items.data.price.product',
+      'expand%5B%5D=data.items.data.price.product&expand%5B%5D=data.customer',
       { headers }
     )
     const subs = await subsRes.json()
@@ -71,25 +74,47 @@ async function fetchStripe() {
       monthlyRevenue[key] = (monthlyRevenue[key] || 0) + inv.amount_paid / 100
     }
 
-    // Product breakdown from active subscriptions
+    // Product breakdown from active subscriptions, monthly-normalized, test accounts excluded
     const productBreakdown = {}
-    let stripeMRR = 0
+    let stripeMRR    = 0  // gross monthly equivalent
+    let stripeMRRNet = 0  // net monthly equivalent after Stripe 2.9% + $0.30 per charge
+    let activeCount  = 0
+
     for (const sub of subs.data || []) {
+      const email = typeof sub.customer === 'object' ? sub.customer?.email : null
+      if (TEST_EMAILS.has(email)) continue
+      activeCount++
+
       for (const item of sub.items?.data || []) {
-        const price   = item.price || {}
-        const product = price.product || {}
-        const name    = typeof product === 'object' ? product.name : 'Unknown'
-        const amt     = (price.unit_amount || 0) / 100
-        productBreakdown[name] = (productBreakdown[name] || 0) + 1
-        stripeMRR += amt
+        const price       = item.price || {}
+        const product     = price.product || {}
+        const name        = typeof product === 'object' ? product.name : 'Unknown'
+        const grossCharge = (price.unit_amount || 0) / 100
+        const recurring   = price.recurring || null
+        const months      = recurring?.interval === 'year'
+          ? 12 * (recurring.interval_count || 1)
+          : (recurring?.interval_count || 1)
+
+        const monthlyGross = grossCharge / months
+        // Stripe fee is applied per actual charge event, then amortized monthly
+        const chargeNet    = grossCharge * 0.971 - 0.30
+        const monthlyNet   = chargeNet / months
+
+        if (!productBreakdown[name]) productBreakdown[name] = { count: 0, monthlyGross: 0, monthlyNet: 0 }
+        productBreakdown[name].count++
+        productBreakdown[name].monthlyGross += monthlyGross
+        productBreakdown[name].monthlyNet   += monthlyNet
+        stripeMRR    += monthlyGross
+        stripeMRRNet += monthlyNet
       }
     }
 
     return {
-      pendingBalance: (balance.pending?.[0]?.amount || 0) / 100,
-      availableBalance: (balance.available?.[0]?.amount || 0) / 100,
-      activeSubscriptions: subs.data?.length || 0,
+      pendingBalance:      (balance.pending?.[0]?.amount  || 0) / 100,
+      availableBalance:    (balance.available?.[0]?.amount || 0) / 100,
+      activeSubscriptions: activeCount,
       stripeMRR,
+      stripeMRRNet,
       productBreakdown,
       monthlyRevenue,
       recentPayouts: (payouts.data || []).slice(0, 5).map(p => ({
