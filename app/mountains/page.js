@@ -160,8 +160,8 @@ export default function MountainsIndexPage() {
         <p className="text-gray-600 mb-8">
           These guides are free and always will be. If you want a pre-trip briefing tailored to your airplane and your trip, or a guide flight on arrival, that&rsquo;s something I do in person out of KLMO.
         </p>
-        <Link href="/#services" className="inline-block bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-8 py-4 rounded-lg font-semibold transition">
-          See Mountain Flying Instruction &amp; Destination Pilot Guide
+        <Link href="/fly-with-me" className="inline-block bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-8 py-4 rounded-lg font-semibold transition">
+          See Packages &amp; Pricing
         </Link>
       </section>
 
