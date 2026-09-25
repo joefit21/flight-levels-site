@@ -1,9 +1,12 @@
-// Active G-AIRMETs intersecting a lat/lon box, from aviationweather.gov.
+// G-AIRMETs intersecting a lat/lon box, across all five forecast periods.
 // Default box is the Colorado high country: 37-41N, 104-109W.
-// Purely a geographic filter, with no judgement about whether any given advisory
-// matters for a given flight.
+// Purely a geographic filter, with no judgement about whether any given
+// advisory matters for a given flight.
 
 const DEFAULT_BOX = { south: 37, north: 41, west: -109, east: -104 }
+
+// G-AIRMETs are issued on a 3-hour grid at +0, +3, +6, +9 and +12 hours.
+const PERIOD_OFFSETS = [0, 3, 6, 9, 12]
 
 // TURB-HI lives above FL180 and is noise for piston mountain flying.
 const EXCLUDED_HAZARDS = new Set(['TURB-HI'])
@@ -84,6 +87,53 @@ function num(v) {
   return Number.isNaN(n) ? null : n
 }
 
+function shapeAdvisory(r) {
+  return {
+    tag: r.tag,
+    hazard: r.hazard,
+    label: HAZARD_LABELS[r.hazard] || r.hazard,
+    product: r.product,
+    severity: r.severity || null,
+    dueTo: r.due_to && r.due_to !== r.hazard ? r.due_to : null,
+    base: num(r.base),
+    top: num(r.top),
+    fzlBase: num(r.fzlbase),
+    fzlTop: num(r.fzltop),
+    validTime: r.validTime,
+  }
+}
+
+async function fetchPeriod(validAt, box) {
+  const iso = validAt.toISOString().replace(/\.\d{3}Z$/, 'Z')
+  const res = await fetch(
+    `https://aviationweather.gov/api/data/gairmet?format=json&date=${encodeURIComponent(iso)}`,
+    { next: { revalidate: 600 } }
+  )
+  if (!res.ok) {
+    console.error('aviationweather.gov gairmet error:', iso, res.status)
+    return null
+  }
+
+  const all = await res.json()
+  if (!Array.isArray(all)) return null
+
+  const advisories = all
+    .filter((r) => !EXCLUDED_HAZARDS.has(r.hazard))
+    .filter((r) => polygonIntersectsBox(r.coords, box))
+    .map(shapeAdvisory)
+    .sort((a, b) => {
+      const ai = HAZARD_ORDER.indexOf(a.hazard)
+      const bi = HAZARD_ORDER.indexOf(b.hazard)
+      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi)
+    })
+
+  return {
+    validTime: iso,
+    forecastHour: all[0]?.forecastHour ?? null,
+    advisories,
+  }
+}
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const box = {
@@ -94,42 +144,26 @@ export async function GET(request) {
   }
 
   try {
-    const res = await fetch('https://aviationweather.gov/api/data/gairmet?format=json', {
-      next: { revalidate: 600 },
-    })
-    if (!res.ok) {
-      console.error('aviationweather.gov gairmet error:', res.status)
-      return Response.json({ error: 'Failed to fetch G-AIRMET data' }, { status: 502 })
+    // Snap to the 3-hour grid the product is issued on
+    const base = new Date()
+    base.setUTCMinutes(0, 0, 0)
+    base.setUTCHours(Math.floor(base.getUTCHours() / 3) * 3)
+
+    const results = await Promise.all(
+      PERIOD_OFFSETS.map((offset) =>
+        fetchPeriod(new Date(base.getTime() + offset * 3600000), box).catch((err) => {
+          console.error('G-AIRMET period fetch failed:', offset, err)
+          return null
+        })
+      )
+    )
+
+    const periods = results.filter(Boolean)
+    if (!periods.length) {
+      return Response.json({ error: 'No G-AIRMET data available' }, { status: 502 })
     }
 
-    const all = await res.json()
-    if (!Array.isArray(all)) {
-      return Response.json({ error: 'Unexpected G-AIRMET response' }, { status: 502 })
-    }
-
-    const advisories = all
-      .filter((r) => !EXCLUDED_HAZARDS.has(r.hazard))
-      .filter((r) => polygonIntersectsBox(r.coords, box))
-      .map((r) => ({
-        tag: r.tag,
-        hazard: r.hazard,
-        label: HAZARD_LABELS[r.hazard] || r.hazard,
-        product: r.product,
-        severity: r.severity || null,
-        dueTo: r.due_to && r.due_to !== r.hazard ? r.due_to : null,
-        base: num(r.base),
-        top: num(r.top),
-        fzlBase: num(r.fzlbase),
-        fzlTop: num(r.fzltop),
-        validTime: r.validTime,
-      }))
-      .sort((a, b) => {
-        const ai = HAZARD_ORDER.indexOf(a.hazard)
-        const bi = HAZARD_ORDER.indexOf(b.hazard)
-        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi)
-      })
-
-    return Response.json({ advisories, box, fetchedAt: new Date().toISOString() })
+    return Response.json({ periods, box, fetchedAt: new Date().toISOString() })
   } catch (error) {
     console.error('G-AIRMET proxy error:', error)
     return Response.json({ error: 'Server error' }, { status: 500 })
