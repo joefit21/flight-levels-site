@@ -5,6 +5,8 @@ import RouteToggle from './RouteToggle'
 import PassesInDetail from './PassesInDetail'
 import AtcComms from './AtcComms'
 import { RouteProvider } from './RouteContext'
+import WindsAloft from '../../components/WindsAloft'
+import GAirmet from '../../components/GAirmet'
 import GuideCta from '../../components/GuideCta'
 import RelatedGuides from '../../components/RelatedGuides'
 import { guideSchema } from '../../lib/schema'
@@ -100,6 +102,23 @@ export default function AsePage() {
               </Link>
             </div>
             <RouteToggle />
+
+            <div className="mt-6">
+              <div className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                Winds aloft
+              </div>
+              <WindsAloft
+                stations={['DEN', 'GJT']}
+                labels={{ DEN: 'Front Range side', GJT: 'Western slope' }}
+              />
+            </div>
+
+            <div className="mt-6">
+              <div className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                G-AIRMETs
+              </div>
+              <GAirmet />
+            </div>
           </div>
 
           <div className="border-t border-gray-100 pt-8 mb-14">
