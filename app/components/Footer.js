@@ -1,11 +1,7 @@
 'use client'
 import { trackEvent } from '../lib/analytics'
+import { PRODUCTS } from '../lib/products'
 
-const PRODUCTS = [
-  { href: 'https://practice.flight-levels.com', label: 'ATC Trainer', id: 'atc_trainer' },
-  { href: 'https://checkride.flight-levels.com', label: 'Checkride Prep', id: 'checkride_prep' },
-  { href: 'https://flightreview.flight-levels.com', label: 'Flight Review Prep', id: 'flight_review_prep' },
-]
 
 function trackProductClick(productId) {
   trackEvent('product_link_click', { product: productId, link_location: 'footer' })

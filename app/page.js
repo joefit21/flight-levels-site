@@ -3,6 +3,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import { PRODUCTS } from './lib/products'
+import { trackEvent } from './lib/analytics'
 
 export default function Home() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
@@ -156,7 +158,7 @@ export default function Home() {
       <Nav />
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#0f2044] to-[#1d4ed8] text-white px-8 py-28 text-center">
+      <section className="bg-gradient-to-br from-[#0f2044] to-[#1d4ed8] text-white px-8 py-24 md:py-28 text-center">
         <div className="inline-block bg-white/10 border border-white/20 text-blue-200 text-sm px-4 py-1 rounded-full mb-6">
           CFI · Former Denver ARTCC Controller · Based at KLMO, Longmont CO
         </div>
@@ -167,34 +169,45 @@ export default function Home() {
           21 years as a flight instructor. A former air traffic controller at Denver ARTCC, now working in ATC automation. Everything on this site comes from having sat in both seats.
         </p>
         <p className="text-blue-300 text-sm font-semibold uppercase tracking-wide mb-6">What brings you here?</p>
-        <div className="grid sm:grid-cols-2 gap-4 max-w-3xl mx-auto text-left">
-          <Link
-            href="/mountains"
+        <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto text-left">
+          <a
+            href="#guides"
             className="group bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/50 rounded-2xl p-6 transition flex flex-col"
           >
             <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Flying into Colorado</div>
-            <div className="text-xl font-bold text-white mb-2">Mountain guides, instruction, and briefings</div>
+            <div className="text-xl font-bold text-white mb-2">Free mountain guides and pre-trip briefings</div>
             <p className="text-blue-100 text-sm leading-relaxed mb-4 flex-1">
-              Free route guides for the mountain airports, plus instruction and pre-trip briefings from someone who worked this airspace from the other side.
+              Route guides for the mountain airports, plus instruction from someone who worked this airspace from the other side.
             </p>
             <span className="text-white font-semibold text-sm group-hover:underline">Start here &rarr;</span>
-          </Link>
+          </a>
           <a
             href="#ai-tools"
             className="group bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/50 rounded-2xl p-6 transition flex flex-col"
           >
-            <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Training for a checkride or review</div>
-            <div className="text-xl font-bold text-white mb-2">AI practice tools, wherever you fly</div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Practice from anywhere</div>
+            <div className="text-xl font-bold text-white mb-2">Online tools for checkrides, reviews and decisions</div>
             <p className="text-blue-100 text-sm leading-relaxed mb-4 flex-1">
-              Mock orals, IFR clearance readbacks, and flight review prep. On demand, from anywhere, no Colorado required.
+              Checkride orals, ADM scenarios, flight review prep and ATC readbacks. On demand, no Colorado required, free demos.
             </p>
             <span className="text-white font-semibold text-sm group-hover:underline">See the tools &rarr;</span>
+          </a>
+          <a
+            href="#services"
+            className="group bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/50 rounded-2xl p-6 transition flex flex-col"
+          >
+            <div className="text-xs font-semibold uppercase tracking-wide text-blue-300 mb-2">Fly with me at KLMO</div>
+            <div className="text-xl font-bold text-white mb-2">Flight reviews, IPCs and mountain flying</div>
+            <p className="text-blue-100 text-sm leading-relaxed mb-4 flex-1">
+              In-person instruction in Longmont, or guided trips into Aspen, Eagle, Steamboat and Telluride in your own airplane.
+            </p>
+            <span className="text-white font-semibold text-sm group-hover:underline">See services &rarr;</span>
           </a>
         </div>
       </section>
 
       {/* Free Guides */}
-      <section id="guides" className="px-8 py-24 max-w-5xl mx-auto">
+      <section id="guides" className="px-8 py-24 max-w-5xl mx-auto scroll-mt-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-[#1e3a5f] mb-4">Free Colorado Flying Guides</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">
@@ -229,21 +242,94 @@ export default function Home() {
             <span className="text-[#1d4ed8] text-sm font-semibold mt-5">Browse the guides &rarr;</span>
           </Link>
         </div>
+        <div className="mt-6 bg-blue-50 border border-blue-100 rounded-2xl px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-600 text-sm md:text-base">
+            <span className="font-semibold text-[#1e3a5f]">Want someone in the right seat?</span> Guided flights and pre-trip briefings for Aspen, Eagle, Steamboat and Telluride, at flat rates.
+          </p>
+          <Link href="/fly-with-me" className="bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-5 py-2.5 rounded-lg text-sm font-medium transition whitespace-nowrap">
+            See Packages &amp; Pricing
+          </Link>
+        </div>
       </section>
 
-      {/* Services */}
-      <section id="services" className="bg-gray-50 px-8 py-24">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-[#1e3a5f] text-center mb-4">Services</h2>
-          <p className="text-gray-500 text-center mb-16">In-person instruction based at KLMO and online tools available to pilots everywhere.</p>
+      {/* Online practice tools */}
+      <section id="ai-tools" className="bg-gray-50 px-8 py-24 scroll-mt-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-[#1e3a5f] mb-4">Online Practice Tools</h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">
+              Built by a CFI and former controller, available to pilots anywhere. Every tool has a free demo, no payment needed to try it.
+            </p>
+          </div>
 
-          {/* In-Person Services */}
-          <div className="mb-4">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="h-px flex-1 bg-gray-200" />
-              <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">In-Person · KLMO, Longmont CO</span>
-              <div className="h-px flex-1 bg-gray-200" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PRODUCTS.map((p) => (
+              <div key={p.id} className={`bg-white rounded-2xl p-7 shadow-sm border ${p.accent.border} hover:shadow-md transition flex flex-col relative overflow-hidden`}>
+                {p.badge && (
+                  <div className={`absolute top-3 right-3 ${p.accent.badge} text-white text-xs font-bold px-2 py-1 rounded-full`}>{p.badge === 'New' ? 'NEW' : p.badge}</div>
+                )}
+                <div className="text-4xl mb-4">{p.icon}</div>
+                <h3 className="text-lg font-bold text-[#1e3a5f] mb-1">{p.label}</h3>
+                <p className="text-sm font-medium text-gray-700 mb-3">{p.blurb}</p>
+                <p className="text-gray-500 text-sm mb-4 flex-1">{p.description}</p>
+                <p className="text-xs text-gray-500 mb-4"><span className="font-semibold text-gray-700">Best for:</span> {p.bestFor}</p>
+                <div className="text-sm text-gray-400 mb-4">{p.price}</div>
+                <a
+                  href={p.demoHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackEvent('product_link_click', { product: p.id, link_location: 'tools_section' })}
+                  className={`block text-center ${p.accent.button} px-4 py-2.5 rounded-lg text-sm font-medium transition`}
+                >
+                  {p.button}
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Human option */}
+          <div className="mt-6 bg-white border border-gray-200 rounded-2xl px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="text-3xl">👨‍✈️</div>
+              <div>
+                <h3 className="text-lg font-bold text-[#1e3a5f]">Prefer a real examiner? Mock Oral Checkrides</h3>
+                <p className="text-gray-500 text-sm">
+                  One-on-one oral exam simulation over FaceTime or Teams. I ask the questions a DPE asks, follow up on weak answers and give you direct feedback. $100 / hour, online.
+                </p>
+              </div>
             </div>
+            <a href="#contact" className="border border-[#1d4ed8] text-[#1d4ed8] hover:bg-blue-50 px-5 py-2.5 rounded-lg text-sm font-medium transition whitespace-nowrap">
+              Book a Session
+            </a>
+          </div>
+
+          {/* Bundle callout */}
+          <div className="mt-10 bg-gradient-to-r from-[#1e1b4b] to-[#312e81] border border-purple-500/40 rounded-2xl px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <div className="inline-block bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">BUNDLE DEAL</div>
+              <h3 className="text-xl font-bold text-white mb-1">Get Both AI Tools: ATC Trainer + Checkride Prep</h3>
+              <p className="text-purple-200 text-sm">One subscription. Full access to both products. Save $9/month vs. buying separately.</p>
+            </div>
+            <div className="flex items-center gap-6 flex-shrink-0">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">$49<span className="text-lg text-purple-300">/mo</span></div>
+                <div className="text-xs text-purple-400">vs. $58 separately</div>
+              </div>
+              <a href="https://checkride.flight-levels.com/signup?bundle=1" target="_blank" className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap">
+                Get the Bundle
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* In-person services */}
+      <section id="services" className="px-8 py-24 scroll-mt-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-[#1e3a5f] mb-4">Fly With Me</h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">In-person instruction based at KLMO, Longmont, Colorado. Prep with the online tools first and use our time in the airplane for the hard parts.</p>
+          </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
               <div className="bg-white rounded-2xl p-7 shadow-sm border-2 border-[#1d4ed8]/20 hover:shadow-md hover:border-[#1d4ed8]/40 transition flex flex-col">
@@ -283,88 +369,6 @@ export default function Home() {
               </div>
 
             </div>
-          </div>
-
-          {/* Online Services + Apps */}
-          <div id="ai-tools" className="mt-12 scroll-mt-28">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="h-px flex-1 bg-gray-200" />
-              <span className="text-sm font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">Online & AI Training Tools</span>
-              <div className="h-px flex-1 bg-gray-200" />
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-              <div className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col">
-                <div className="text-4xl mb-4">👨‍✈️</div>
-                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">Mock Oral Checkrides</h3>
-                <p className="text-gray-500 text-sm mb-6 flex-1">
-                  One-on-one oral exam simulation via FaceTime or Teams. I'll ask the questions a real DPE asks, follow up on weak answers, and give you direct feedback so the actual checkride feels familiar.
-                </p>
-                <div className="text-sm text-gray-400 mb-4">$100 / hour · Online</div>
-                <a href="#contact" className="block text-center border border-[#1d4ed8] text-[#1d4ed8] hover:bg-blue-50 px-4 py-2.5 rounded-lg text-sm font-medium transition">
-                  Book a Session
-                </a>
-              </div>
-
-              <div className="bg-white rounded-2xl p-7 shadow-sm border border-teal-100 hover:shadow-md transition flex flex-col relative overflow-hidden">
-                <div className="absolute top-3 right-3 bg-teal-500 text-white text-xs font-bold px-2 py-1 rounded-full">AI</div>
-                <div className="text-4xl mb-4">🎓</div>
-                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">Checkride Prep AI</h3>
-                <p className="text-gray-500 text-sm mb-6 flex-1">
-                  Practice your oral exam on-demand with an AI examiner trained to think like a real DPE. Private, Instrument, and Commercial. Voice-enabled. Available at 11pm the night before your checkride.
-                </p>
-                <div className="text-sm text-gray-400 mb-4">$29 / month · Cancel anytime</div>
-                <a href="https://checkride.flight-levels.com/demo" target="_blank" className="block text-center bg-[#0f766e] hover:bg-[#0d6460] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition">
-                  Try Free Demo
-                </a>
-              </div>
-
-              <div className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col">
-                <div className="text-4xl mb-4">🎙️</div>
-                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">ATC Trainer App</h3>
-                <p className="text-gray-500 text-sm mb-6 flex-1">
-                  AI-generated ATC scenarios for practicing ground control and IFR clearance readbacks. Built with authentic ATC knowledge, drawn from years working the actual controller's position.
-                </p>
-                <div className="text-sm text-gray-400 mb-4">$29 / month · Cancel anytime</div>
-                <a href="https://practice.flight-levels.com" target="_blank" className="block text-center bg-[#1d4ed8] hover:bg-[#1e40af] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition">
-                  Try Free Demo
-                </a>
-              </div>
-
-              <div className="bg-white rounded-2xl p-7 shadow-sm border border-green-100 hover:shadow-md transition flex flex-col relative overflow-hidden">
-                <div className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">AI</div>
-                <div className="text-4xl mb-4">✈️</div>
-                <h3 className="text-lg font-bold text-[#1e3a5f] mb-3">Flight Review Prep</h3>
-                <p className="text-gray-500 text-sm mb-6 flex-1">
-                  Practice the ground portion of your biennial flight review with an AI CFI. Part 91 regulations, airspace, weather, emergency procedures, and more. Available 24/7 before your actual review.
-                </p>
-                <div className="text-sm text-gray-400 mb-4">$29 / month · Cancel anytime</div>
-                <a href="https://flightreview.flight-levels.com/demo" target="_blank" className="block text-center bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition">
-                  Try Free Demo
-                </a>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Bundle callout */}
-          <div className="mt-10 bg-gradient-to-r from-[#1e1b4b] to-[#312e81] border border-purple-500/40 rounded-2xl px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <div className="inline-block bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">BUNDLE DEAL</div>
-              <h3 className="text-xl font-bold text-white mb-1">Get Both AI Tools: ATC Trainer + Checkride Prep</h3>
-              <p className="text-purple-200 text-sm">One subscription. Full access to both products. Save $9/month vs. buying separately.</p>
-            </div>
-            <div className="flex items-center gap-6 flex-shrink-0">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-white">$49<span className="text-lg text-purple-300">/mo</span></div>
-                <div className="text-xs text-purple-400">vs. $58 separately</div>
-              </div>
-              <a href="https://checkride.flight-levels.com/signup?bundle=1" target="_blank" className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap">
-                Get the Bundle
-              </a>
-            </div>
-          </div>
-
         </div>
       </section>
 
@@ -598,6 +602,7 @@ export default function Home() {
                 <option value="Mock Oral Checkride">Mock Oral Checkride</option>
                 <option value="Flight Instruction">Flight Instruction (General)</option>
                 <option value="ATC Trainer">ATC Trainer App</option>
+                <option value="ADM Trainer">ADM Trainer</option>
                 <option value="Checkride Prep">Checkride Prep AI</option>
                 <option value="Flight Review Prep">Flight Review Prep AI</option>
                 <option value="Other">Other</option>

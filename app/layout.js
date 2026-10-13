@@ -29,6 +29,8 @@ export const metadata = {
     "checkride prep",
     "mock oral checkride",
     "ATC trainer app",
+    "aeronautical decision making training",
+    "ADM scenario trainer",
     "aviation training Colorado",
     "CFI CFII",
     "private pilot instruction",
